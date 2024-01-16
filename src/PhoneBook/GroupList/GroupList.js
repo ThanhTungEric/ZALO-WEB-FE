@@ -6,88 +6,91 @@ import avt1 from "../img/father.png";
 import avt2 from "../img/mother.png";
 import avt3 from "../img/son.png";
 
+// State
+import React, { useState } from "react";
+
 const data = [
   {
     type: "Gia đình",
     info: {
-      name: "Thanh",
+      name: "B",
       img: avt1,
     },
   },
   {
     type: "Gia đình",
     info: {
-      name: "Thanh Huỳnh",
+      name: "F",
       img: avt3,
     },
   },
   {
     type: "Bạn bè",
     info: {
-      name: "Thanh Huỳnh",
+      name: "C",
       img: avt2,
     },
   },
   {
     type: "Gia đình",
     info: {
-      name: "Thanh",
+      name: "D",
       img: avt1,
     },
   },
   {
     type: "Văn phòng",
     info: {
-      name: "Thanh Huỳnh",
+      name: "B",
       img: avt3,
     },
   },
   {
     type: "Bạn bè",
     info: {
-      name: "Thanh Huỳnh",
+      name: "H",
       img: avt2,
     },
   },
   {
     type: "Văn phòng",
     info: {
-      name: "Thanh",
+      name: "T",
       img: avt1,
     },
   },
   {
     type: "Công ty",
     info: {
-      name: "Thanh Huỳnh",
+      name: "K",
       img: avt3,
     },
   },
   {
     type: "Công ty",
     info: {
-      name: "Thanh Huỳnh",
+      name: "B",
       img: avt2,
     },
   },
   {
     type: "Dịch vụ",
     info: {
-      name: "Thanh",
+      name: "J",
       img: avt1,
     },
   },
   {
     type: "Dịch vụ",
     info: {
-      name: "Thanh Huỳnh",
+      name: "N",
       img: avt3,
     },
   },
   {
     type: "Quán ăn",
     info: {
-      name: "Thanh Huỳnh",
+      name: "O",
       img: avt2,
     },
   },
@@ -115,9 +118,26 @@ const data = [
 ];
 
 const FriendList = () => {
+  const [sortedData, setSortedData] = useState(data);
+  const [sortOrder, setSortOrder] = useState("desc");
+
+  const sortByName = (order) => {
+    const sorted = [...data].sort((a, b) => {
+      const nameA = a.info.name.toUpperCase();
+      const nameB = b.info.name.toUpperCase();
+
+      if (order === "asc") {
+        return nameA.localeCompare(nameB);
+      } else {
+        return nameB.localeCompare(nameA);
+      }
+    });
+    setSortedData(sorted);
+    setSortOrder(order);
+  };
+
   const itemsByType = {};
-  // Duyệt qua dữ liệu và tổ chức lại thành object theo từng loại
-  data.forEach((item) => {
+  sortedData.forEach((item) => {
     if (!itemsByType[item.type]) {
       itemsByType[item.type] = [];
     }
@@ -128,7 +148,7 @@ const FriendList = () => {
       <div key={type}>
         <h2>{type}</h2>
         {itemsByType[type].map((item, index) => (
-          <div key={index}>
+          <div key={index} className={styles.abc}>
             <div className={styles.info}>
               <img
                 src={item.info.img}
@@ -162,10 +182,10 @@ const FriendList = () => {
           <div className={styles["paste-button"]}>
             <button className={styles.button}>Sắp xếp &nbsp; ▼</button>
             <div className={styles["dropdown-content"]}>
-              <a id="az" href="#">
+              <a id="az" href="#" onClick={() => sortByName("asc")}>
                 A-Z
               </a>
-              <a id="za" href="#">
+              <a id="za" href="#" onClick={() => sortByName("desc")}>
                 Z-A
               </a>
             </div>

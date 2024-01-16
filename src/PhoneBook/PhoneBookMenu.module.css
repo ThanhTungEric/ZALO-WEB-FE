@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: row;
     background-color: red;
+   
   }
 
   .left {
@@ -14,13 +15,8 @@
     margin: 20px;
     justify-content: space-between;
     align-items: center;
-    background-color: #e8e8e8;
+    background-color: #CDF1FF;
   }
-  /* .fixed{
-    position: fixed;
-    height: 50%;
-    background-color: #e8e8e8;
-  } */
   
   .leftTop{
     flex-direction: row;
@@ -156,7 +152,7 @@
     right: 0;
     width: 66%; /* Đặt chiều rộng phù hợp với nhu cầu của bạn */
     height: 100%;
-    background-color: yellow;
+    background-color: #CDF1FF;
     margin: 20px;
     padding: 20px;
     overflow-y: auto; /* Cho phép cuộn nếu nội dung vượt ra ngoài chiều cao */

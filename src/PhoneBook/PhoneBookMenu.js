@@ -3,6 +3,7 @@ import styles from "./PhoneBookMenu.module.css";
 // component
 import FriendList from "./FriendList/FriendList";
 import GroupList from "./GroupList/GroupList";
+import AddFriend from "./AddFriend/AddFriend";
 
 // State
 import React, { useState } from "react";
@@ -20,12 +21,21 @@ const PhoneBookMenu = () => {
   const toggleFriendList = () => {
     setShowFriendList(true);
     setShowGroupList(false);
+    setShowAddFriend(false);
   };
   // show and hide group list
   const [showGroupList, setShowGroupList] = useState(false);
   const toggleGroupList = () => {
     setShowFriendList(false);
     setShowGroupList(true);
+    setShowAddFriend(false);
+  };
+  // show and hide add friend
+  const [showAddFriend, setShowAddFriend] = useState(false);
+  const toggleAddFriend = () => {
+    setShowAddFriend(true);
+    setShowFriendList(false);
+    setShowGroupList(false);
   };
 
   return (
@@ -94,7 +104,10 @@ const PhoneBookMenu = () => {
           </button>
 
           {/* icon */}
-          <button className={styles["icon_friend_request"]}>
+          <button
+            className={styles["icon_friend_request"]}
+            onClick={toggleAddFriend}
+          >
             <img
               src={Mail}
               alt="User Icon"
@@ -112,6 +125,7 @@ const PhoneBookMenu = () => {
       <div className={styles.right}>
         {showFriendList && <FriendList />}
         {showGroupList && <GroupList />}
+        {showAddFriend && <AddFriend />}
       </div>
 
       {/* Hết bên phải */}

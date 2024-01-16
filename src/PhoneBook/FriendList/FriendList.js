@@ -7,6 +7,11 @@ import avt2 from "../img/mother.png";
 import avt3 from "../img/son.png";
 import { type } from "@testing-library/user-event/dist/type";
 
+// react
+import React, { useState } from "react";
+
+//popup
+
 const data = [
   {
     type: "A",
@@ -116,21 +121,40 @@ const data = [
 ];
 
 const FriendList = () => {
-  // Tạo một object để chứa danh sách các phần tử theo từng loại
+  const [sortedData, setSortedData] = useState(data);
+  const [sortOrder, setSortOrder] = useState("desc");
+
+  //Sắp xếp danh sách theo thứ tự để thành danh sách mới
+  const sortByName = (order) => {
+    const sorted = [...data].sort((a, b) => {
+      const nameA = a.info.name.toUpperCase();
+      const nameB = b.info.name.toUpperCase();
+
+      if (order === "asc") {
+        return nameA.localeCompare(nameB);
+      } else {
+        return nameB.localeCompare(nameA);
+      }
+    });
+    setSortedData(sorted);
+    setSortOrder(order);
+  };
+  //Duyệt phần tử theo loại với mảng đã sắp xếp theo type
   const itemsByType = {};
-  // Duyệt qua dữ liệu và tổ chức lại thành object theo từng loại
-  data.forEach((item) => {
+  sortedData.forEach((item) => {
     if (!itemsByType[item.type]) {
       itemsByType[item.type] = [];
     }
     itemsByType[item.type].push(item);
   });
+
+  // Component friend
   const renderItemsByType = () => {
     return Object.keys(itemsByType).map((type) => (
       <div key={type}>
         <h2>{type}</h2>
         {itemsByType[type].map((item, index) => (
-          <div key={index}>
+          <div key={index} className={styles.abc}>
             <div className={styles.info}>
               <img
                 src={item.info.img}
@@ -144,11 +168,6 @@ const FriendList = () => {
         ))}
       </div>
     ));
-  };
-
-  //filter friend list following name
-  const sortZA = () => {
-    console.log(sortedData);
   };
 
   return (
@@ -170,10 +189,10 @@ const FriendList = () => {
           <div className={styles["paste-button"]}>
             <button className={styles.button}>Sắp xếp &nbsp; ▼</button>
             <div className={styles["dropdown-content"]}>
-              <a id="az" href="#">
+              <a id="az" href="#" onClick={() => sortByName("asc")}>
                 A-Z
               </a>
-              <a id="za" href="#" onClick={sortZA}>
+              <a id="za" href="#" onClick={() => sortByName("desc")}>
                 Z-A
               </a>
             </div>
