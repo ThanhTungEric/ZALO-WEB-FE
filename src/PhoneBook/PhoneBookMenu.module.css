@@ -1,0 +1,165 @@
+.main {
+    display: flex;
+    flex-direction: row;
+    background-color: red;
+   
+  }
+
+  .left {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    height: 100%;
+    width: 25%;
+    margin: 20px;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #CDF1FF;
+  }
+  
+  .leftTop{
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+  }
+   
+  .container {
+    position: relative;
+    background: linear-gradient(135deg, rgb(179, 208, 253) 0%, rgb(164, 202, 248) 100%);
+    border-radius: 1000px;
+    padding: 10px;
+    display: grid;
+    place-content: center;
+    z-index: 0;
+    max-width: 250px;
+    margin: 10px;
+
+  }
+  
+  .search-container {
+    position: relative;
+    width: 99%;
+    border-radius: 50px;
+    background: linear-gradient(135deg, rgb(218, 232, 247) 0%, rgb(214, 229, 247) 100%);
+    display: flex;
+    align-items: center;
+  }
+  
+  .search-container::after, .search-container::before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    position: absolute;
+  }
+  
+  .search-container::before {
+    top: -1px;
+    left: -1px;
+    background: linear-gradient(0deg, rgb(218, 232, 247) 0%, rgb(255, 255, 255) 100%);
+    z-index: -1;
+  }
+  
+  .search-container::after {
+    bottom: -1px;
+    right: -1px;
+    background: linear-gradient(0deg, rgb(163, 206, 255) 0%, rgb(211, 232, 255) 100%);
+    box-shadow: rgba(79, 156, 232, 0.7019607843) 3px 3px 5px 0px, rgba(79, 156, 232, 0.7019607843) 5px 5px 20px 0px;
+    z-index: -2;
+  }
+  
+  .input {
+    padding: 10px;
+    width: 100%;
+    background: linear-gradient(135deg, rgb(218, 232, 247) 0%, rgb(214, 229, 247) 100%);
+    border: none;
+    color: #9EBCD9;
+    font-size: 20px;
+    border-radius: 50px;
+  }
+  
+  .input:focus {
+    outline: none;
+    background: linear-gradient(135deg, rgb(239, 247, 255) 0%, rgb(214, 229, 247) 100%);
+  }
+  
+  .search__icon {
+    width: 50px;
+    aspect-ratio: 1;
+    border-left: 2px solid white;
+    border-top: 3px solid transparent;
+    border-bottom: 3px solid transparent;
+    border-radius: 50%;
+    padding-left: 12px;
+    margin-right: 10px;
+  }
+  
+  .search__icon:hover {
+    border-left: 3px solid white;
+  }
+  
+  .search__icon path {
+    fill: white;
+  }
+
+  .iconRow{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .icon_friend_list, .icon_group_list, .icon_friend_request{
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    border: none;
+    background: none;
+    width: 100%;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+
+  .icon_friend_list:hover, .icon_group_list:hover, .icon_friend_request:hover{
+    background-color: #d9d9d9;
+    border-radius: 10px;
+
+  }
+
+  .icon_friend_list_sub, .icon_group_list_sub, .icon_friend_request_sub, .icon_user{
+    width:50px;
+    height:50px;
+    margin-right: 10px;
+  }
+  .icon_user:hover{
+    background-color: #d9d9d9;
+    cursor: pointer;
+  }
+
+  .leftBottom{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+
+  .right {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 66%; /* Đặt chiều rộng phù hợp với nhu cầu của bạn */
+    height: 100%;
+    background-color: #CDF1FF;
+    margin: 20px;
+    padding: 20px;
+    overflow-y: auto; /* Cho phép cuộn nếu nội dung vượt ra ngoài chiều cao */
+  }
+  .left,
+.right {
+  transition: margin 0.3s ease-in-out; /* Chọn giá trị phù hợp cho bạn */
+}
+
+  

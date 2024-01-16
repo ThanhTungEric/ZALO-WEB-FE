@@ -1,4 +1,6 @@
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import PhoneBookMenu from "./PhoneBook/PhoneBookMenu";
 
 //
 import Chat from './view/Chat';
@@ -6,9 +8,7 @@ import Chat from './view/Chat';
 function App() {
   return (
     <div className="App">
-      <div>
-        <Chat />
-      </div>
+      <PhoneBookMenu />
     </div>
   );
 }
