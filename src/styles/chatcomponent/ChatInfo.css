@@ -1,0 +1,19 @@
+.chat-info-container {
+  width: 22%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #eaedf0;
+}
+.header-chat-info {
+  background-color: #fff;
+  padding-top: 18px;
+}
+.scroll-list-compoent {
+  width: 100%;
+  height: 90%;
+  overflow-y: scroll;
+}
+.scroll-list-compoent::-webkit-scrollbar {
+  display: none;
+}

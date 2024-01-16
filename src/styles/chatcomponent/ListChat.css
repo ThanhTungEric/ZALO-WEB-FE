@@ -1,0 +1,102 @@
+.list-chat-container{
+    width: 23%;
+    background-color: #f9fafb;
+}
+.create-group-chat{
+    background-color: #eaedf0;
+    margin-left: 10px;
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.input-search-custom {
+    background-color:#eaedf0;
+    width: 100%;
+    height: 100%;
+    border-radius: 0.25rem;
+    border: none;
+    outline: none;
+    text-align: center;
+}
+
+.list-chat-search{
+    width: 100%;
+    height: 80px;
+    background-color: #fff;
+    padding-top: 5px;
+}
+.input-search-container{
+    width: 70%;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.input-search-custom:focus {
+    box-shadow: none;
+}
+
+.list-chat-type-container{
+    display: flex;
+    padding-left: 10px;
+    padding-right: 10px;
+    height: 45px;
+}
+.list-chat-type{
+    padding-right: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #798ca5;
+}
+
+.list-chat-type-focus{
+    font-size: 15px;
+    font-weight: 600;
+    color: #798ca5;
+    border-bottom: 2px solid #007bff;
+    text-align: center;
+    margin-right: 10px;
+}
+
+/* Path: src/styles/chatcomponent/Chat.css */
+.list-chat-item{
+    padding-left: 5px;
+    padding-right: 8px;
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 10px;
+
+}
+.list-chat-item:hover{
+    background-color: #f4f5f7;
+}
+.list-chat-item:focus{
+    background-color: #e5efff;
+}
+.avatar-container{
+    height: 50px;
+    display: flex;
+    align-items: center;
+}
+.avatar-custom{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.info-container{
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    padding-left: 5px;
+}
+.time-container{
+    margin-left: 5px;
+}

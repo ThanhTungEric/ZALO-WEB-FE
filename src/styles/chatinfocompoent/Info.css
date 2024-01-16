@@ -1,0 +1,32 @@
+.info-user-container{
+    width: 100%;
+    height: 180px;
+    flex-direction: column;
+    background-color: #fff;
+    border-top: 1px solid #eaedf0;
+    padding-top: 10px;
+}
+.noticate-component-container{
+    width: 200px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+.noticate-component-parent{
+    width: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #99a9bb;
+    font-size: 13px;
+    font-weight: 400;
+}
+.noticate-component-child{
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: #eaedf0;
+}

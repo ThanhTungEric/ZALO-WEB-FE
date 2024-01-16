@@ -1,0 +1,8 @@
+.chat-container{
+    height: 100vh;
+    display: flex;
+}
+.chat-container-item{
+    width: 100%;
+    height: 100%;
+}
