@@ -1,8 +1,6 @@
 .main {
     display: flex;
     flex-direction: row;
-    background-color: red;
-   
   }
 
   .left {
@@ -11,11 +9,11 @@
     bottom: 0;
     left: 0;
     height: 100%;
-    width: 25%;
-    margin: 20px;
+    width: 26%;
     justify-content: space-between;
     align-items: center;
     background-color: #CDF1FF;
+    margin-left: 90px;
   }
   
   .leftTop{
@@ -141,8 +139,8 @@
   .leftBottom{
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
+    justify-content: start;
+    align-items: start;
   }
 
   .right {
@@ -150,10 +148,9 @@
     top: 0;
     bottom: 0;
     right: 0;
-    width: 66%; /* Đặt chiều rộng phù hợp với nhu cầu của bạn */
+    width: 65%; /* Đặt chiều rộng phù hợp với nhu cầu của bạn */
     height: 100%;
     background-color: #CDF1FF;
-    margin: 20px;
     padding: 20px;
     overflow-y: auto; /* Cho phép cuộn nếu nội dung vượt ra ngoài chiều cao */
   }
