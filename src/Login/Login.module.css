@@ -48,6 +48,7 @@ html, body {
   outline: none;
   position: relative;
   transition: margin-left 0.5s, color 0.5s; /* Thêm transition ở đây */
+  /* letter-spacing: 1px; */
 }
 
 .btn {

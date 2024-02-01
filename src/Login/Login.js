@@ -11,8 +11,6 @@ const User = [
 const Login = () => {
     const [userName, setUserName] = useState('ChiThanh');
     const [password, setPassword] = useState('12022002');
-    // const navigate = useNavigate();
-    // const navigate = useNavigate();
 
     const login = (event) => {
         event.preventDefault();
@@ -22,8 +20,8 @@ const Login = () => {
         var checklogin = User.some(value => value.USERNAME === txtUser && value.PASSWORD === txtPass);
 
         if (checklogin) {
-            // Chuyển hướng đến trang MainMenu
-            // navigate('/menu');
+            // navigate('/chat');
+            window.location.href = "/chat";
         } else {
             alert("Sai tên đăng nhập hoặc mật khẩu");
         }
