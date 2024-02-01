@@ -8,7 +8,7 @@ import Chat from './view/Chat';
 function App() {
   return (
     <div className="App">
-      <PhoneBookMenu />
+      <Chat />
     </div>
   );
 }
