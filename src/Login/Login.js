@@ -9,15 +9,52 @@ const User = [
     }
 ]
 const Login = () => {
-    const [userName, setUserName] = useState('ChiThanh');
-    const [password, setPassword] = useState('12022002');
+    const [userName, setUserName] = useState('');
+    const [password, setPassword] = useState('');
+    const [userData, setUserData] = useState([]); // State to store user data
+    const [error, setError] = useState(null);
+    const [newArr, setNewArr] = useState([]);
+
+    const url = "http://localhost:8080/user";
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`Network response was not ok: ${response.status}`);
+                }
+
+                const data = await response.json();
+                setUserData(data);
+            } catch (error) {
+                console.error("Error:", error);
+                setError(error.message || 'An error occurred');
+            }
+        };
+
+        fetchUserData();
+    }, [url]); // Fetch user data only when url changes
+
+    // Log user data when it changes
+    useEffect(() => {
+        const newArr = userData.map(({ phoneNumber, password }) => ({ phoneNumber, password }));
+        setNewArr(newArr);
+        console.log(newArr);
+    }, [userData]);
+
+
+
+
 
     const login = (event) => {
         event.preventDefault();
 
         var txtUser = userName;
         var txtPass = password;
-        var checklogin = User.some(value => value.USERNAME === txtUser && value.PASSWORD === txtPass);
+        // var checklogin = User.some(value => value.USERNAME === txtUser && value.PASSWORD === txtPass);
+
+        var checklogin = newArr.some(value => value.phoneNumber === txtUser && value.password === txtPass);
 
         if (checklogin) {
             // navigate('/chat');
