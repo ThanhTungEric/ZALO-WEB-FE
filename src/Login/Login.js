@@ -1,14 +1,27 @@
+import 'firebase/auth';
+import {
+    onAuthStateChanged
+} from 'firebase/auth';
+import 'firebase/compat/auth';
+import React, { useEffect, useState, useRef } from 'react';
 import styles from './Login.module.css';
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
-const User = [
-    {
-        USERNAME: 'ChiThanh',
-        PASSWORD: '12022002'
-    }
-]
-const Login = () => {
+import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
+import OtpInput from 'otp-input-react';
+import { BsTelephone } from 'react-icons/bs';
+import { CgSpinner } from 'react-icons/cg';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
+import { auth } from '../firebase.config';
+import { toast, Toaster } from 'react-hot-toast';
+import OTP from '../OTP/OTP';
+
+
+
+
+
+
+const Login = ({ props }) => {
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const [userData, setUserData] = useState([]); // State to store user data
@@ -16,7 +29,6 @@ const Login = () => {
     const [newArr, setNewArr] = useState([]);
 
     const url = "http://localhost:8080/user";
-
     useEffect(() => {
         const fetchUserData = async () => {
             try {
@@ -32,7 +44,6 @@ const Login = () => {
                 setError(error.message || 'An error occurred');
             }
         };
-
         fetchUserData();
     }, [url]); // Fetch user data only when url changes
 
@@ -42,10 +53,6 @@ const Login = () => {
         setNewArr(newArr);
         console.log(newArr);
     }, [userData]);
-
-
-
-
 
     const login = (event) => {
         event.preventDefault();
@@ -129,6 +136,86 @@ const Login = () => {
     const toggleForm = () => {
         setLoginFormVisible(!isLoginFormVisible);
     };
+
+    //otp
+    const [otp, setOtp] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [showOtp, setShowOtp] = useState(false);
+    const [user, setUser] = useState(null);
+    const [requestCount, setRequestCount] = useState(0);
+    const [lastRequestTime, setLastRequestTime] = useState(0);
+
+    const recaptchaContainerRef = useRef(null);
+    const MAX_REQUESTS = 5; // Maximum number of requests allowed
+    const REQUEST_INTERVAL = 60000;
+
+    function onCaptchVerify() {
+        if (!window.recaptchaVerifier) {
+            window.recaptchaVerifier = new RecaptchaVerifier(
+                recaptchaContainerRef.current, // Use the ref to get the DOM element
+                {
+                    'size': 'invisible',
+                    'callback': (response) => {
+                        onSignUp();
+                    },
+                    'expired-callback': () => {
+                        // Handle expired callback if needed
+                    }
+                },
+                auth
+            );
+        }
+    }
+
+    function onOtpVerify() {
+        setLoading(true);
+        window.confirmationResult.confirm(otp).then(async (result) => {
+            console.log(result);
+            setUser(result.user);
+            setLoading(false);
+        }).catch((error) => {
+            console.log(error);
+            setLoading(false);
+        });
+    }
+
+    function onSignUp() {
+        const currentTime = Date.now();
+
+        // Check if the last request was made within the allowed time interval
+        if (currentTime - lastRequestTime < REQUEST_INTERVAL) {
+            setRequestCount(requestCount + 1);
+
+            // Check if the maximum number of requests is reached
+            if (requestCount >= MAX_REQUESTS) {
+                toast.error('Too many requests. Please try again later.');
+                return;
+            }
+        } else {
+            // Reset request count if the time interval has passed
+            setRequestCount(1);
+        }
+
+        setLastRequestTime(currentTime);
+        setLoading(true);
+        onCaptchVerify();
+        setLoading(true);
+        onCaptchVerify();
+        const appVerifier = window.recaptchaVerifier;
+        const format = '+' + phoneNumber;
+        signInWithPhoneNumber(auth, format, appVerifier)
+            .then((confirmationResult) => {
+                window.confirmationResult = confirmationResult;
+                setLoading(false);
+                setShowOtp(true);
+                toast.success('OTP sent successfully');
+            }).catch((error) => {
+                console.log(error);
+                alert('Số điên thoại không hợp lệ');
+                setLoading(false);
+            });
+    }
     return (
         <div className={styles.hero}>
             <div className={styles.container}>
@@ -167,52 +254,43 @@ const Login = () => {
             </div>
 
             <div className={styles["form-box"]}>
-                <div className={styles["button-box"]}>
-                    <div className={styles.btn}></div>
-                    <button
-                        type="button"
-                        className={`${styles["toggle-btn"]} ${isLoginFormVisible ? 'login' : 'register'}`}
-                        onClick={toggleForm}
-                    >
-                        {isLoginFormVisible ? 'Login' : 'Register'}
-                    </button>
+                <div>
+                    <div className={styles["button-box"]}>
+                        <div className={styles.btn}></div>
+                        <button
+                            type="button"
+                            className={`${styles["toggle-btn"]} ${isLoginFormVisible ? 'login' : 'register'}`}
+                            onClick={toggleForm}
+                        >
+                            {isLoginFormVisible ? 'Login' : 'Register'}
+                        </button>
 
-                    <button
-                        type="button"
-                        className={`${styles["toggle-btn"]} ${isLoginFormVisible ? 'register' : 'login'}`}
-                        style={{ marginLeft: '12px' }}
-                        onClick={toggleForm}
-                    >
-                        {isLoginFormVisible ? 'Register' : 'Login'}
-                    </button>
+                        <button
+                            type="button"
+                            className={`${styles["toggle-btn"]} ${isLoginFormVisible ? 'register' : 'login'}`}
+                            style={{ marginLeft: '12px' }}
+                            onClick={toggleForm}
+                        >
+                            {isLoginFormVisible ? 'Register' : 'Login'}
+                        </button>
+                    </div>
+
+                    {isLoginFormVisible ? (
+                        <form id="login" action="" className={styles["input-group"]} onSubmit={login}>
+                            <input id="txtName" type="text" className={styles["input-field"]} placeholder="User ID" required onChange={(e) => setUserName(e.target.value)} value={userName} />
+                            <input id="txtPass" type="password" className={styles["input-field"]} placeholder="User password" required onChange={(e) => setPassword(e.target.value)} value={password} />
+                            <input type="checkbox" className={styles["check-box"]} /><span>Remember Password</span>
+                            <button id="checkbox" className={styles["submit-btn"]} type="submit" style={{ color: 'whitesmoke', fontWeight: 500, fontSize: '20px' }}>Log in</button>
+                        </form>
+                    ) : (
+                        <OTP />
+
+                    )}
                 </div>
 
-                {isLoginFormVisible ? (
-                    <form id="login" action="" className={styles["input-group"]} onSubmit={login}>
-                        <input id="txtName" type="text" className={styles["input-field"]} placeholder="User ID" required onChange={(e) => setUserName(e.target.value)} value={userName} />
-                        <input id="txtPass" type="password" className={styles["input-field"]} placeholder="User password" required onChange={(e) => setPassword(e.target.value)} value={password} />
-                        <input type="checkbox" className={styles["check-box"]} /><span>Remember Password</span>
-                        <button id="checkbox" className={styles["submit-btn"]} type="submit" style={{ color: 'whitesmoke', fontWeight: 500, fontSize: '20px' }}>Log in</button>
-                    </form>
-                ) : (
-                    <form id="register" action="" className={styles["input-group"]}>
-                        <input type="text" className={styles["input-field"]} placeholder="User ID" id="txtID" required />
-                        {/* <span className={styles["err"]} id="errID">*</span> */}
-                        <input type="password" className={styles["input-field"]} placeholder="Enter Password" id="txtPW" required />
-                        {/* <span className={styles["err"]} id="errPW">*</span> */}
-                        <input type="password" className={styles["input-field"]} placeholder="Re-enter Password" id="txtRPW" required />
-                        {/* <span className={styles["err"]} id="errRPW">*</span> */}
-                        <input type="text" className={styles["input-field"]} placeholder="User Name" required id="txtUN" />
-                        {/* <span className={styles["err"]} id="errUN">*</span> */}
-                        <input type="text" className={styles["input-field"]} placeholder="User Phone" id="txtPhone" />
-                        <input type="checkbox" className={styles["check-box"]} />
-                        <span>I agree to the term & condition</span>
-                        <button className={styles["submit-btn"]} style={{ color: 'whitesmoke', fontWeight: 500, fontSize: '20px' }} id="regis">Register</button>
-                    </form>
-                )}
+                {/* <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} /> */}
             </div>
         </div>
-
 
     );
 };
