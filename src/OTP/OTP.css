@@ -1,0 +1,144 @@
+.otp-container{
+    @apply flex justify-between gap-2;
+}
+.icon{
+    margin-right: 10px;
+    color: #fff;
+    font-size: 19px;
+}
+.label{
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+    color: #fff;
+    font-size: 20px;
+
+}
+.center-phone-input {
+    display: inline-block;
+    margin: 0 auto;
+}
+.phone{
+    border: none;
+}
+.button {
+    display: inline-block;
+    width: 150px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid #03045e;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.5s ease-in;
+    z-index: 1;
+    font-family: 'Courier New', Courier, monospace;
+    color: #fff;
+    width: 50%;
+    margin-top: 20px;
+    border: none;
+    background-color: #e0aaff;
+   }
+   
+   .button::before,
+   .button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 0;
+    height: 100%;
+    transform: skew(15deg);
+    transition: all 0.5s;
+    overflow: hidden;
+    z-index: -1;
+   }
+   
+   .button::before {
+    left: -10px;
+    background: #240046;
+   }
+   
+   .button::after {
+    right: -10px;
+    background: #5a189a;
+   }
+   
+   .button:hover::before,
+   .button:hover::after {
+    width: 58%;
+   }
+   
+   .button:hover .span {
+    color: #e0aaff;
+    transition: 0.3s;
+   }
+   
+   .button .span {
+    color: #03045e;
+    font-size: 18px;
+    transition: all 0.3s ease-in;
+   }
+   /* btn-verify */
+   .otp-container{
+    margin-left: 50px;
+    margin-bottom: 50px;
+    border: none;
+   }
+   .btn-verify{
+    margin-left: 100px;
+   }
+
+   .btn-verify {
+    display: inline-block;
+    width: 150px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid #03045e;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.5s ease-in;
+    z-index: 1;
+    font-family: 'Courier New', Courier, monospace;
+    color: #fff;
+    width: 50%;
+    margin-top: 20px;
+    border: none;
+    background-color: #e0aaff;
+   }
+   
+   .btn-verify::before,
+   .btn-verify::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 0;
+    height: 100%;
+    transform: skew(15deg);
+    transition: all 0.5s;
+    overflow: hidden;
+    z-index: -1;
+   }
+   
+   .btn-verify::before {
+    left: -10px;
+    background: #240046;
+   }
+   
+   .btn-verify::after {
+    right: -10px;
+    background: #5a189a;
+   }
+   
+   .btn-verify:hover::before,
+   .btn-verify:hover::after {
+    width: 58%;
+   }
+   
+   .btn-verify:hover .span {
+    color: #e0aaff;
+    transition: 0.3s;
+   }
+   
+   .btn-verify .span {
+    color: #03045e;
+    font-size: 18px;
+    transition: all 0.3s ease-in;
+   }
