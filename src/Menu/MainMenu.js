@@ -20,7 +20,7 @@ import user from "./img/user.png";
 
 const MainMenu = () => {
   // hide menu when user is not logged in
-  const [isLoggedIn, setLoggedIn] = useState(false);
+  const [isLoggedIn, setLoggedIn] = useState(true);
 
   const handleLogout = () => {
     setLoggedIn(true);
