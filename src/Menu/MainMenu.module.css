@@ -1,0 +1,13 @@
+.Link{
+    width: 50px;
+    padding: 10px;
+    background-color: #574E92;
+}
+.iconUser, .iconSetting, .iconSignOut, .iconPhoneBook, .iconChat{
+    width: 30px;
+    height: 30px;
+    margin-bottom: 30px;
+}
+.iconUser{
+    margin-top: 10px;
+}

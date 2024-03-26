@@ -9,7 +9,7 @@
   .info{
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
+    justify-content: start;
     align-items: center;
     margin-left: 15px;
     padding: 20px;
@@ -100,7 +100,20 @@
    /* popup */
    .refuseModal{
     width: 300px;
-    height: 400px;
+    height: 200px;
     background-color: #Fff;
     margin: auto;
+    border: #003140 solid 1px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+   }
+
+   .headerPopup{
+    flex-direction: row;
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    padding: 20px;
    }

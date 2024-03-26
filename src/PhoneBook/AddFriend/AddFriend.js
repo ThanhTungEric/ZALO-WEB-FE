@@ -3,12 +3,18 @@ import Modal from "react-modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment } from "@fortawesome/free-solid-svg-icons";
 import styles from "../AddFriend/AddFriend.module.css";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Link,
+  useNavigate,
+} from "react-router-dom";
 
 // img
 import avt1 from "../img/father.png";
 import avt2 from "../img/mother.png";
 import avt3 from "../img/son.png";
-
 const data = [
   {
     name: "Huynh Chi Thanh",
@@ -51,16 +57,14 @@ const data = [
 ];
 
 const AddFriend = () => {
+  // pôpup confirm
   const [isRefuseModalOpen, setIsRefuseModalOpen] = useState(false);
-
   const openRefuseModal = () => {
     setIsRefuseModalOpen(true);
   };
-
   const closeRefuseModal = () => {
     setIsRefuseModalOpen(false);
   };
-
   // Component xác nhận từ chối
   const ConfirmRefuse = () => {
     return (
@@ -71,25 +75,32 @@ const AddFriend = () => {
         className={styles.refuseModal}
       >
         <div>
-          <div className={styles.header}>
-            <h2>Từ chối kết bạn</h2>
-            <p>&#10005;</p>
+          <div className={styles.headerPopup}>
+            <h2 style={{ fontSize: 20 }}>Từ chối kết bạn</h2>
+            <button onClick={closeRefuseModal}>&#10005;</button>
           </div>
           <div>
-            <p>Bạn có chắc muốn từ chối kết bạn?</p>
+            <p className="text-center">Bạn có chắc muốn từ chối kết bạn?</p>
           </div>
           <div className={styles.button}>
             <button
               className={styles["refuse-button"]}
               onClick={closeRefuseModal}
             >
-              Hủy
+              Đóng
             </button>
-            <button className={styles["accept-button"]}>Từ chối</button>
+            <button className={styles["accept-button"]}>Từ chối kết bạn</button>
           </div>
         </div>
       </Modal>
     );
+  };
+
+  //chuyển đến trang chat
+  const navigate = useNavigate();
+  const handleChatButtonClick = () => {
+    // Navigate to the chat screen when the chat button is clicked
+    navigate("/chat");
   };
 
   // Component friend
@@ -104,18 +115,23 @@ const AddFriend = () => {
               <img src={item.img} alt={item.name} className={styles.avt} />
             </div>
             <span> {item.name}</span>
-            <p className="date"> {item.date}</p>
-            <button className={styles["icon-chat"]}>
-              <FontAwesomeIcon icon={faComment} />
-            </button>
-            <div className={styles.button}>
+            <p className="date text-center"> {item.date}</p>
+            <div className="text-center">
               <button
-                className={styles["refuse-button"]}
-                onClick={openRefuseModal}
+                className={styles["icon-chat"]}
+                onClick={handleChatButtonClick}
               >
-                Từ chối
+                <FontAwesomeIcon icon={faComment} />
               </button>
-              <button className={styles["accept-button"]}> Đồng ý</button>
+              <div className={styles.button}>
+                <button
+                  className={styles["refuse-button"]}
+                  onClick={openRefuseModal}
+                >
+                  Từ chối
+                </button>
+                <button className={styles["accept-button"]}> Đồng ý</button>
+              </div>
             </div>
           </div>
         </div>

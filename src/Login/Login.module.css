@@ -1,0 +1,298 @@
+*{
+  margin: 0px;
+  padding: 0px;
+}
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+.hero{
+  height: 100%;
+  width: 100%;
+  /* background-color: #d9dde2; */
+  background-image: url(https://images3.alphacoders.com/273/thumb-1920-273289.jpg);
+  background-position: center;
+  background-size: cover;
+  position: absolute;
+}
+.form-box{
+  width: 400px;
+  height: 600px;
+  position: relative;
+  margin: 4% auto;
+  background: #fff;
+  padding: 5px;
+  overflow: hidden;
+  border-radius: 30px;
+  margin-right: 30px;
+  box-shadow: 20px -10px 50px white;
+  background-image: linear-gradient(to right top, #d16ba5, #ef7386, #f68866, #e9a64f, #cac451, #9bd06d, #65d896, #00dbc2, #00ccec, #00b6ff, #0095ff, #9c5ffb);
+}
+.button-box {
+  width: 230px;
+  margin: 35px auto;
+  position: relative;
+  background: #fff;
+  border-radius: 30px;
+  overflow: hidden;
+  transition: background-image 0.5s; /* Thêm transition ở đây */
+}
+
+.toggle-btn {
+  padding: 10px 30px;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  outline: none;
+  position: relative;
+  transition: margin-left 0.5s, color 0.5s; /* Thêm transition ở đây */
+  /* letter-spacing: 1px; */
+}
+
+.btn {
+  top: 0;
+  left: 0px;
+  position: absolute;
+  width: 110px;
+  height: 100%;
+  background-image: linear-gradient(to right top, #fff00f, #d6f10d, #aaf023, #76ee3c, #12eb54);
+  background-image: -webkit-linear-gradient(40deg, red, blue);
+  border-radius: 30px;
+  transition: .5s;
+}
+
+.hero .social-icon{
+  font-size: 40px;
+  text-align: center;
+  color: #10ff44;
+  text-shadow: 0 2px 5px #ffad06;
+}
+.hero .social-icon i{
+  margin: 0px 20px;
+  cursor: pointer;
+}
+  .input-group{
+    width: 360px;
+    transition: .5s;
+    margin: 0 auto;
+  }
+  .input-field{
+    width: 100%;
+    padding: 10px 0;
+    border: none;
+    border-bottom: 1px solid #999;
+    outline: none;
+    background: transparent;
+    padding-left: 10px;
+    color: whitesmoke;
+    margin-bottom: 20px;
+  }
+.submit-btn{
+  width: 85%;
+  padding: 10px 30px;
+  cursor: pointer;
+  display: block;
+  margin: auto;
+  border: none;
+  /* background-image: linear-gradient(to right top, #fff00f, #d6f10d, #aaf023, #76ee3c, #12eb54); */
+  background-image: -webkit-linear-gradient(40deg, red, blue);;
+  /* background: linear-gradient(to right, #ff105f, #ffad06); */
+  border-radius: 20px;
+  outline: none;
+}
+.check-box{
+  margin: 10px 10px 30px 0;
+}
+.checkbox{
+  color: #777;
+  font-size: 12px;
+  position: absolute;
+  bottom: -100px;
+}
+.login{
+  left: 50px;
+}
+.register{
+  top: 150px;
+  left: 490px;   
+}
+.err{
+  position: relative;
+  top: -14px;
+  left: 250px;
+  color: red;
+}
+
+/* clock */
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.container{
+  left: 20px;
+  top: 50px;
+  /* position: relative; */
+  position: absolute;
+  /* min-height: 500px; */
+  width: 250px ;
+  height: 330px;
+  border-radius: 10px;
+  border-top-left-radius: 225px;
+  border-top-right-radius: 225px;
+  box-shadow: 25px 25px 75px rgba(0, 0, 0, 0.75),
+  10px 10px 70px rgba(0, 0, 0, 0.25),
+  inset 5px 5px 10px  rgba(0, 0, 0, 0.5),
+  inset 5px 5px 20px  rgba(255, 255, 255, 0.2),
+  inset -5px -5px 15px  rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+/* đồng hồ số */
+.time{
+  position: absolute;
+  top: 250px;
+  display: flex;
+  padding: 10px 20px;
+  font-size: 1.3em;
+  margin-top: 5px;
+  border: 2px solid rgba(0, 0, 0, 0.5);
+  border-radius: 50px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5),
+  inset 5px 5px 20px rgba(255, 255, 255, 0.2),
+  inset -5px -5px 15px rgba(0, 0, 0, 0.75);
+}
+.time div{
+  position: relative;
+  width: 30px;
+  text-align: center;
+  font-weight: bold;
+  color: var(--clr);
+}
+.time div:nth-child(1)::after,
+.time div:nth-child(2)::after{
+  content: ':';
+  position: absolute;
+  right: -3px;
+}
+.time div:last-child{
+  font-size: 0.5em;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  color: #fff;
+  margin-top: 7px;
+}
+.clock{
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  background-color: #2f363e;
+  top: 0px;
+  left: 0px;
+  border-radius: 50%;
+  box-shadow: 10px 50px 70px rgba(0, 0, 0, 0.25),
+  inset 5px 5px 10px  rgba(0, 0, 0, 0.5),
+  inset 5px 5px 20px  rgba(255, 2555, 255, 0.2),
+  inset -5px -5px 15px  rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.clock::before{
+  content: '';
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background: #2f363e;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  z-index: 10000;
+}
+.clock span{
+  position: absolute;
+  inset: 20px;
+  color: white;
+  text-align: center;
+  transform: rotate(calc(30deg*var(--i)));
+}
+.clock span b{
+  font-size: 1em;
+  opacity: 0.25;
+  font-weight: 600;
+  display: inline-block;
+  transform: rotate(calc(-30deg*var(--i)));
+}
+
+
+/* 3 vòng tròn */
+.circle{
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border: 2px solid rgba(0, 0, 0, 0.25);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  z-index: 10;
+}
+/* Kim đồng hồ */
+.circle i {
+  height: 50%;
+  width: 3px;
+  position: absolute;
+  background: var(--clr);
+  border-radius: 10px;
+  opacity: 0.75;
+  transform-origin: bottom;
+  transform: scaleY(0.5);
+}
+.circle i:nth-child(1) i{
+  width: 2px;
+}
+.circle i:nth-child(2) i{
+  width: 6px;
+}
+/* Chỉnh đồ dài vòng tròn thứ 2 */
+.circle2{
+  width: 120px;
+  height: 120px;
+  z-index: 9;
+}
+.circle3{
+  width: 90px;
+  height: 90px;
+  z-index: 8;
+
+}
+/* 3 cục */
+.circle::before{
+  content: '';
+  width: 8px;
+  top:-6px;
+  height: 8px;
+  position: absolute;
+  background: var(--clr);
+  border-radius: 50%;
+  box-shadow: 0 0 20px var(--clr),
+  0 0 20px var(--clr)
+}
+
+.time div:nth-child(2)::after
+{
+  animation: animate 1s steps(1) infinite;
+}
+@keyframes animate{
+  0%{
+      opacity: 1;
+  }
+  50%{
+      opacity: 0;
+  }
+}
