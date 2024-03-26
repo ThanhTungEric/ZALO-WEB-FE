@@ -1,31 +1,76 @@
+import 'firebase/auth';
+import {
+    onAuthStateChanged
+} from 'firebase/auth';
+import 'firebase/compat/auth';
+import React, { useEffect, useState, useRef } from 'react';
 import styles from './Login.module.css';
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
-const User = [
-    {
-        USERNAME: 'ChiThanh',
-        PASSWORD: '12022002'
-    }
-]
+import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
+import OtpInput from 'otp-input-react';
+import { BsTelephone } from 'react-icons/bs';
+import { CgSpinner } from 'react-icons/cg';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
+import { auth } from '../firebase.config';
+import { toast, Toaster } from 'react-hot-toast';
+import OTP from '../OTP/OTP';
+
+// redux
+import Info from '../Profile/Info';
+import { useSelector, useDispatch } from "react-redux";
+import { fetchUserByNumberPhone } from "../ReduxToolkit/ActionAndRedux";
+import { Link } from 'react-router-dom';
+const bcrypt = require('bcryptjs');
+
 const Login = () => {
-    const [userName, setUserName] = useState('ChiThanh');
-    const [password, setPassword] = useState('12022002');
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [password, setPassword] = useState('');
+    const [userData, setUserData] = useState([]); // State to store user data
+    const [error, setError] = useState(null);
+    const [newArr, setNewArr] = useState([]);
 
-    const login = (event) => {
-        event.preventDefault();
+    const dispatch = useDispatch();
 
-        var txtUser = userName;
-        var txtPass = password;
-        var checklogin = User.some(value => value.USERNAME === txtUser && value.PASSWORD === txtPass);
 
-        if (checklogin) {
-            // navigate('/chat');
-            window.location.href = "/chat";
-        } else {
-            alert("Sai tên đăng nhập hoặc mật khẩu");
+    const url = `http://localhost:8080/user/login`;
+
+    const login = async (e) => {
+        e.preventDefault();
+        try {
+            const hashedPassword = await bcrypt.hash(password, 10);
+            // Gửi yêu cầu đăng nhập
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    phoneNumber,
+                    password
+                })
+            });
+
+            // Kiểm tra phản hồi từ máy chủ
+            if (!response.ok) {
+                const data = await response.json();
+                throw new Error(data.message || 'Đăng nhập thất bại');
+            }
+
+            // Lấy thông tin người dùng từ Redux store
+            dispatch(fetchUserByNumberPhone({ phoneNumber, password }));
+
+            // Chuyển hướng người dùng đến trang Info với thông tin đăng nhập
+            const queryString = `?phoneNumber=${phoneNumber}&password=${hashedPassword}`;
+            const infoUrl = '/info' + queryString;
+            window.location.href = infoUrl;
+        } catch (error) {
+            console.error('Đăng nhập thất bại:', error.message);
+            alert('Đăng nhập thất bại');
         }
     };
+
+
 
     // đồng hồ analog
     const [rotationDegrees, setRotationDegrees] = useState({
@@ -92,6 +137,86 @@ const Login = () => {
     const toggleForm = () => {
         setLoginFormVisible(!isLoginFormVisible);
     };
+
+    //otp
+    const [otp, setOtp] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [phone, setPhone] = useState('');
+    const [showOtp, setShowOtp] = useState(false);
+    const [user, setUser] = useState(null);
+    const [requestCount, setRequestCount] = useState(0);
+    const [lastRequestTime, setLastRequestTime] = useState(0);
+
+    const recaptchaContainerRef = useRef(null);
+    const MAX_REQUESTS = 5; // Maximum number of requests allowed
+    const REQUEST_INTERVAL = 60000;
+
+    function onCaptchVerify() {
+        if (!window.recaptchaVerifier) {
+            window.recaptchaVerifier = new RecaptchaVerifier(
+                recaptchaContainerRef.current, // Use the ref to get the DOM element
+                {
+                    'size': 'invisible',
+                    'callback': (response) => {
+                        onSignUp();
+                    },
+                    'expired-callback': () => {
+                        // Handle expired callback if needed
+                    }
+                },
+                auth
+            );
+        }
+    }
+
+    function onOtpVerify() {
+        setLoading(true);
+        window.confirmationResult.confirm(otp).then(async (result) => {
+            console.log(result);
+            setUser(result.user);
+            setLoading(false);
+        }).catch((error) => {
+            console.log(error);
+            setLoading(false);
+        });
+    }
+
+    function onSignUp() {
+        const currentTime = Date.now();
+
+        // Check if the last request was made within the allowed time interval
+        if (currentTime - lastRequestTime < REQUEST_INTERVAL) {
+            setRequestCount(requestCount + 1);
+
+            // Check if the maximum number of requests is reached
+            if (requestCount >= MAX_REQUESTS) {
+                toast.error('Too many requests. Please try again later.');
+                return;
+            }
+        } else {
+            // Reset request count if the time interval has passed
+            setRequestCount(1);
+        }
+
+        setLastRequestTime(currentTime);
+        setLoading(true);
+        onCaptchVerify();
+        setLoading(true);
+        onCaptchVerify();
+        const appVerifier = window.recaptchaVerifier;
+        const format = '+' + phone;
+        signInWithPhoneNumber(auth, format, appVerifier)
+            .then((confirmationResult) => {
+                window.confirmationResult = confirmationResult;
+                setLoading(false);
+                setShowOtp(true);
+                toast.success('OTP sent successfully');
+            }).catch((error) => {
+                console.log(error);
+                alert('Số điên thoại không hợp lệ');
+                setLoading(false);
+            });
+    }
     return (
         <div className={styles.hero}>
             <div className={styles.container}>
@@ -130,52 +255,44 @@ const Login = () => {
             </div>
 
             <div className={styles["form-box"]}>
-                <div className={styles["button-box"]}>
-                    <div className={styles.btn}></div>
-                    <button
-                        type="button"
-                        className={`${styles["toggle-btn"]} ${isLoginFormVisible ? 'login' : 'register'}`}
-                        onClick={toggleForm}
-                    >
-                        {isLoginFormVisible ? 'Login' : 'Register'}
-                    </button>
+                <div>
+                    <div className={styles["button-box"]}>
+                        <div className={styles.btn}></div>
+                        <button
+                            type="button"
+                            className={`${styles["toggle-btn"]} ${isLoginFormVisible ? 'login' : 'register'}`}
+                            onClick={toggleForm}
+                        >
+                            {isLoginFormVisible ? 'Login' : 'Register'}
+                        </button>
 
-                    <button
-                        type="button"
-                        className={`${styles["toggle-btn"]} ${isLoginFormVisible ? 'register' : 'login'}`}
-                        style={{ marginLeft: '12px' }}
-                        onClick={toggleForm}
-                    >
-                        {isLoginFormVisible ? 'Register' : 'Login'}
-                    </button>
+                        <button
+                            type="button"
+                            className={`${styles["toggle-btn"]} ${isLoginFormVisible ? 'register' : 'login'}`}
+                            style={{ marginLeft: '12px' }}
+                            onClick={toggleForm}
+                        >
+                            {isLoginFormVisible ? 'Register' : 'Login'}
+                        </button>
+                    </div>
+
+                    {isLoginFormVisible ? (
+                        <form id="login" action="" className={styles["input-group"]} onSubmit={login}>
+                            <input id="txtPhone" type="text" className={styles["input-field"]} placeholder="Số điện thoại" required onChange={(e) => setPhoneNumber(e.target.value)} value={phoneNumber} />
+                            <input id="txtPass" type="password" className={styles["input-field"]} placeholder="User password" required onChange={(e) => setPassword(e.target.value)} value={password} />
+                            <input type="checkbox" className={styles["check-box"]} /><span>Remember Password</span>
+                            <button id="checkbox" className={styles["submit-btn"]} type="submit" style={{ color: 'whitesmoke', fontWeight: 500, fontSize: '20px' }} >Log in</button>
+                        </form>
+                    ) : (
+                        <OTP isLoginFormVisible={isLoginFormVisible} toggleForm={toggleForm} />
+
+                    )}
                 </div>
 
-                {isLoginFormVisible ? (
-                    <form id="login" action="" className={styles["input-group"]} onSubmit={login}>
-                        <input id="txtName" type="text" className={styles["input-field"]} placeholder="User ID" required onChange={(e) => setUserName(e.target.value)} value={userName} />
-                        <input id="txtPass" type="password" className={styles["input-field"]} placeholder="User password" required onChange={(e) => setPassword(e.target.value)} value={password} />
-                        <input type="checkbox" className={styles["check-box"]} /><span>Remember Password</span>
-                        <button id="checkbox" className={styles["submit-btn"]} type="submit" style={{ color: 'whitesmoke', fontWeight: 500, fontSize: '20px' }}>Log in</button>
-                    </form>
-                ) : (
-                    <form id="register" action="" className={styles["input-group"]}>
-                        <input type="text" className={styles["input-field"]} placeholder="User ID" id="txtID" required />
-                        {/* <span className={styles["err"]} id="errID">*</span> */}
-                        <input type="password" className={styles["input-field"]} placeholder="Enter Password" id="txtPW" required />
-                        {/* <span className={styles["err"]} id="errPW">*</span> */}
-                        <input type="password" className={styles["input-field"]} placeholder="Re-enter Password" id="txtRPW" required />
-                        {/* <span className={styles["err"]} id="errRPW">*</span> */}
-                        <input type="text" className={styles["input-field"]} placeholder="User Name" required id="txtUN" />
-                        {/* <span className={styles["err"]} id="errUN">*</span> */}
-                        <input type="text" className={styles["input-field"]} placeholder="User Phone" id="txtPhone" />
-                        <input type="checkbox" className={styles["check-box"]} />
-                        <span>I agree to the term & condition</span>
-                        <button className={styles["submit-btn"]} style={{ color: 'whitesmoke', fontWeight: 500, fontSize: '20px' }} id="regis">Register</button>
-                    </form>
-                )}
+                {/* <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} /> */}
             </div>
-        </div>
 
+        </div>
 
     );
 };

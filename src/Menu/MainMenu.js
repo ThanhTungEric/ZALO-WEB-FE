@@ -20,17 +20,12 @@ import user from "./img/user.png";
 
 const MainMenu = () => {
   // hide menu when user is not logged in
-  const [isLoggedIn, setLoggedIn] = useState(true);
+  const [isLoggedIn, setLoggedIn] = useState(false);
 
   const handleLogout = () => {
-    setLoggedIn(false);
+    setLoggedIn(true);
   };
 
-  //hide model
-  const [isModelOpen, setIsModelOpen] = useState(false);
-  const openModel = () => {
-    setIsModelOpen(true);
-  };
 
   return (
     <Router>
@@ -46,18 +41,38 @@ const MainMenu = () => {
             <Link to="/phone-book">
               <img src={phoneBook} className={styles.iconPhoneBook} alt="Phone Book" />
             </Link>
-            <Link to="/">
+            {/* <Link to="/">
               <img src={setting} className={styles.iconSetting} alt="Setting" />
-            </Link>
+            </Link> */}
             <Link to="/login" onClick={() => handleLogout()}>
               <img src={logout} alt="Logout" className={styles.iconSignOut} />
             </Link>
           </div>
-        )}
+        )
+          ? (
+            <div className={styles.Link}>
+              <Link to="/info">
+                <img src={user} className={styles.iconUser} alt="User" />
+              </Link>
+              <Link to="/chat">
+                <img src={chat} className={styles.iconChat} alt="Chat" />
+              </Link>
+              <Link to="/phone-book">
+                <img src={phoneBook} className={styles.iconPhoneBook} alt="Phone Book" />
+              </Link>
+              <Link to="/">
+                <img src={setting} className={styles.iconSetting} alt="Setting" />
+              </Link>
+              <Link to="/login" onClick={() => handleLogout()}>
+                <img src={logout} alt="Logout" className={styles.iconSignOut} />
+              </Link>
+            </div>
+          ) : null
+
+        }
         <div style={{ flex: 1 }}>
           <Routes>
-            <Route exact path="/" element={<Chat />} />
-
+            <Route exact path="/" element={<Login />} />
             <Route exact path="/info" element={<Info />} />
             <Route path="/phone-book/*" element={<PhoneBookMenu />} />
             <Route path="/chat" element={<Chat />} />
