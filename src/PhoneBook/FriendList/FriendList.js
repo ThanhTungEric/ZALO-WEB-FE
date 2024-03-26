@@ -8,7 +8,7 @@ import avt3 from "../img/son.png";
 import { type } from "@testing-library/user-event/dist/type";
 
 // react
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 //popup
 
@@ -121,6 +121,27 @@ const data = [
 ];
 
 const FriendList = () => {
+
+  // const [data, setData] = useState([]);
+  // // lấy userId gắn vào link để lấy dữ liệu từ server - nhớ sửa lại
+  // useEffect(() => {
+  //   fetch("http://localhost:8080/friend/get-friend/65f076ac5c69ae13bb82b877", {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       console.log(data);
+  //       setData(data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error:", error);
+  //     });
+  // }, []);
+
+
   const [sortedData, setSortedData] = useState(data);
   const [sortOrder, setSortOrder] = useState("desc");
 

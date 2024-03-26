@@ -9,11 +9,12 @@
     bottom: 0;
     left: 0;
     height: 100%;
-    width: 26%;
+    width: 23%;
     justify-content: space-between;
     align-items: center;
-    background-color: #CDF1FF;
-    margin-left: 90px;
+    background-color: #f9fafb;
+    margin-left: 50px;
+    padding-top: 10px;
   }
   
   .leftTop{
@@ -25,47 +26,20 @@
    
   .container {
     position: relative;
-    background: linear-gradient(135deg, rgb(179, 208, 253) 0%, rgb(164, 202, 248) 100%);
-    border-radius: 1000px;
-    padding: 10px;
     display: grid;
     place-content: center;
     z-index: 0;
     max-width: 250px;
     margin: 10px;
-
+    width: 250px;
   }
-  
-  .search-container {
-    position: relative;
-    width: 99%;
-    border-radius: 50px;
-    background: linear-gradient(135deg, rgb(218, 232, 247) 0%, rgb(214, 229, 247) 100%);
+  .input-search-container{
+    min-width: 100%;
+    height: 35px;
     display: flex;
     align-items: center;
-  }
-  
-  .search-container::after, .search-container::before {
-    content: "";
-    width: 100%;
-    height: 100%;
-    border-radius: inherit;
-    position: absolute;
-  }
-  
-  .search-container::before {
-    top: -1px;
-    left: -1px;
-    background: linear-gradient(0deg, rgb(218, 232, 247) 0%, rgb(255, 255, 255) 100%);
-    z-index: -1;
-  }
-  
-  .search-container::after {
-    bottom: -1px;
-    right: -1px;
-    background: linear-gradient(0deg, rgb(163, 206, 255) 0%, rgb(211, 232, 255) 100%);
-    box-shadow: rgba(79, 156, 232, 0.7019607843) 3px 3px 5px 0px, rgba(79, 156, 232, 0.7019607843) 5px 5px 20px 0px;
-    z-index: -2;
+    padding-left: 10px;
+    padding-right: 10px;
   }
   
   .input {
@@ -81,19 +55,7 @@
   .input:focus {
     outline: none;
     background: linear-gradient(135deg, rgb(239, 247, 255) 0%, rgb(214, 229, 247) 100%);
-  }
-  
-  .search__icon {
-    width: 50px;
-    aspect-ratio: 1;
-    border-left: 2px solid white;
-    border-top: 3px solid transparent;
-    border-bottom: 3px solid transparent;
-    border-radius: 50%;
-    padding-left: 12px;
-    margin-right: 10px;
-  }
-  
+  }  
   .search__icon:hover {
     border-left: 3px solid white;
   }
@@ -107,29 +69,51 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    padding-right: 10px;
+  }
+
+  .add_user, .add_user_group{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    padding: 5px;
+  }
+  .add_user:hover, .add_user_group:hover{
+    background-color: #d9d9d9;
+    border-radius: 10px;
   }
 
   .icon_friend_list, .icon_group_list, .icon_friend_request{
     display: flex;
     flex-direction: row;
+    align-items: center;
     padding: 10px;
     border: none;
     background: none;
     width: 100%;
     cursor: pointer;
     margin-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
   }
 
   .icon_friend_list:hover, .icon_group_list:hover, .icon_friend_request:hover{
-    background-color: #d9d9d9;
-    border-radius: 10px;
-
+    background-color: #eaedf0;
+  }
+  .text {
+    margin-bottom: 0; /* Loại bỏ margin dưới nếu có */
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 18px;
+    font-weight: 500;
   }
 
+
   .icon_friend_list_sub, .icon_group_list_sub, .icon_friend_request_sub, .icon_user{
-    width:50px;
-    height:50px;
-    margin-right: 10px;
+    width:35px;
+    height:35px;
   }
   .icon_user:hover{
     background-color: #d9d9d9;

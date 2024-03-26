@@ -101,7 +101,6 @@ const Info = () => {
                                     {/* Use the DatePicker component */}
                                     <DatePicker
                                         selected={new Date(data[0].dob)} // Provide the initial date
-                                        onChange={(date) => handleDateChange(date)} // Define a function to handle date changes
                                         dateFormat="dd/MM/yyyy" // Set the desired date format
                                         className={styles["form-update-content-box-input-input"]} // Apply your styling here
                                     />
