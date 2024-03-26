@@ -16,60 +16,61 @@ import { auth } from '../firebase.config';
 import { toast, Toaster } from 'react-hot-toast';
 import OTP from '../OTP/OTP';
 
+// redux
+import Info from '../Profile/Info';
+import { useSelector, useDispatch } from "react-redux";
+import { fetchUserByNumberPhone } from "../ReduxToolkit/ActionAndRedux";
+import { Link } from 'react-router-dom';
+const bcrypt = require('bcryptjs');
 
-
-
-
-
-const Login = ({ props }) => {
-    const [userName, setUserName] = useState('');
+const Login = () => {
+    const [phoneNumber, setPhoneNumber] = useState('');
     const [password, setPassword] = useState('');
     const [userData, setUserData] = useState([]); // State to store user data
     const [error, setError] = useState(null);
     const [newArr, setNewArr] = useState([]);
 
-    const url = "http://localhost:8080/user";
-    useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error(`Network response was not ok: ${response.status}`);
-                }
+    const dispatch = useDispatch();
 
+
+    const url = `http://localhost:8080/user/login`;
+
+    const login = async (e) => {
+        e.preventDefault();
+        try {
+            const hashedPassword = await bcrypt.hash(password, 10);
+            // Gửi yêu cầu đăng nhập
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    phoneNumber,
+                    password
+                })
+            });
+
+            // Kiểm tra phản hồi từ máy chủ
+            if (!response.ok) {
                 const data = await response.json();
-                setUserData(data);
-            } catch (error) {
-                console.error("Error:", error);
-                setError(error.message || 'An error occurred');
+                throw new Error(data.message || 'Đăng nhập thất bại');
             }
-        };
-        fetchUserData();
-    }, [url]); // Fetch user data only when url changes
 
-    // Log user data when it changes
-    useEffect(() => {
-        const newArr = userData.map(({ phoneNumber, password }) => ({ phoneNumber, password }));
-        setNewArr(newArr);
-        console.log(newArr);
-    }, [userData]);
+            // Lấy thông tin người dùng từ Redux store
+            dispatch(fetchUserByNumberPhone({ phoneNumber, password }));
 
-    const login = (event) => {
-        event.preventDefault();
-
-        var txtUser = userName;
-        var txtPass = password;
-        // var checklogin = User.some(value => value.USERNAME === txtUser && value.PASSWORD === txtPass);
-
-        var checklogin = newArr.some(value => value.phoneNumber === txtUser && value.password === txtPass);
-
-        if (checklogin) {
-            // navigate('/chat');
-            window.location.href = "/chat";
-        } else {
-            alert("Sai tên đăng nhập hoặc mật khẩu");
+            // Chuyển hướng người dùng đến trang Info với thông tin đăng nhập
+            const queryString = `?phoneNumber=${phoneNumber}&password=${hashedPassword}`;
+            const infoUrl = '/info' + queryString;
+            window.location.href = infoUrl;
+        } catch (error) {
+            console.error('Đăng nhập thất bại:', error.message);
+            alert('Đăng nhập thất bại');
         }
     };
+
+
 
     // đồng hồ analog
     const [rotationDegrees, setRotationDegrees] = useState({
@@ -140,7 +141,7 @@ const Login = ({ props }) => {
     //otp
     const [otp, setOtp] = useState('');
     const [loading, setLoading] = useState(false);
-    const [phoneNumber, setPhoneNumber] = useState('');
+    const [phone, setPhone] = useState('');
     const [showOtp, setShowOtp] = useState(false);
     const [user, setUser] = useState(null);
     const [requestCount, setRequestCount] = useState(0);
@@ -203,7 +204,7 @@ const Login = ({ props }) => {
         setLoading(true);
         onCaptchVerify();
         const appVerifier = window.recaptchaVerifier;
-        const format = '+' + phoneNumber;
+        const format = '+' + phone;
         signInWithPhoneNumber(auth, format, appVerifier)
             .then((confirmationResult) => {
                 window.confirmationResult = confirmationResult;
@@ -277,19 +278,20 @@ const Login = ({ props }) => {
 
                     {isLoginFormVisible ? (
                         <form id="login" action="" className={styles["input-group"]} onSubmit={login}>
-                            <input id="txtName" type="text" className={styles["input-field"]} placeholder="User ID" required onChange={(e) => setUserName(e.target.value)} value={userName} />
+                            <input id="txtPhone" type="text" className={styles["input-field"]} placeholder="Số điện thoại" required onChange={(e) => setPhoneNumber(e.target.value)} value={phoneNumber} />
                             <input id="txtPass" type="password" className={styles["input-field"]} placeholder="User password" required onChange={(e) => setPassword(e.target.value)} value={password} />
                             <input type="checkbox" className={styles["check-box"]} /><span>Remember Password</span>
-                            <button id="checkbox" className={styles["submit-btn"]} type="submit" style={{ color: 'whitesmoke', fontWeight: 500, fontSize: '20px' }}>Log in</button>
+                            <button id="checkbox" className={styles["submit-btn"]} type="submit" style={{ color: 'whitesmoke', fontWeight: 500, fontSize: '20px' }} >Log in</button>
                         </form>
                     ) : (
-                        <OTP />
+                        <OTP isLoginFormVisible={isLoginFormVisible} toggleForm={toggleForm} />
 
                     )}
                 </div>
 
                 {/* <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} /> */}
             </div>
+
         </div>
 
     );

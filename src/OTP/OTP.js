@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 
 import "../OTP/OTP.css"
 
-const OTP = () => {
+const OTP = ({ isLoginFormVisible, toggleForm }) => {
     const recaptchaContainerRef = useRef(null);
     const [user, setUser] = useState(null);
     const [showOtp, setShowOtp] = useState(false);
@@ -25,6 +25,8 @@ const OTP = () => {
     const [requestCount, setRequestCount] = useState(0);
     const [otp, setOtp] = useState('');
     const phone = phoneNumber.slice(2);
+
+
 
     const REQUEST_INTERVAL = 60000;
     const MAX_REQUESTS = 100;
@@ -109,8 +111,8 @@ const OTP = () => {
     }
     //check username
     const checkUsername = () => {
-        const txtID = document.getElementById('txtID');
-        if (txtID.value === "") {
+        const txtName = document.getElementById('txtName');
+        if (txtName.value === "") {
             toast.error('Tên đăng nhập không được để trống');
             return false;
         }
@@ -164,19 +166,71 @@ const OTP = () => {
             return true;
         }
     }
-
-    const checkRegister = () => {
-        if (checkUsername() && checkPassword() && rePassword() && checkBirthday()) {
-            toast.success('Đăng ký thành công');
-            // chuyển đến trang đăng nhập
-            navigate('/login');
+    const checkEmail = () => {
+        const txtE = document.getElementById('txtE');
+        const re = /\S+@\S+\.\S+/;
+        if (txtE.value === "") {
+            toast.error('Email không được để trống');
+            return false;
+        }
+        else if (!re.test(txtE.value)) {
+            toast.error('Email không hợp lệ');
+            return false;
         }
         else {
-            toast.error('Chưa nhập đúng thông tin đăng ký');
-            return false;
+            return true;
         }
     }
 
+    const CheckRegister = (event) => {
+        event.preventDefault(); // Ngăn chặn hành vi mặc định của sự kiện
+
+        const txtName = document.getElementById('txtName').value;
+        const txtPW = document.getElementById('txtPW').value;
+        const txtBD = document.getElementById('txtBD').value;
+        const txtP = document.getElementById('txtP').value;
+        const txtE = document.getElementById('txtE').value;
+        const txtRPW = document.getElementById('txtRPW').value;
+
+
+        if (txtName && txtPW && txtBD && txtP && txtE && txtRPW) {
+            const userData = {
+                fullName: txtName,
+                password: txtPW,
+                birthDate: txtBD,
+                phoneNumber: txtP,
+                email: txtE
+            }
+            console.log(userData)
+
+            fetch(`http://localhost:8080/user`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userData),
+
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to register');
+                    }
+                    toast.success('Đăng ký thành công');
+                    toggleForm();
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Registration successful:', data);
+                    alert("Login success")
+                    // Xử lý phản hồi từ server nếu cần
+                })
+                .catch(error => {
+                    console.error('Registration failed:', error.message);
+                    // Xử lý lỗi nếu cần
+                });
+            // chuyển đến trang đăng nhập
+        }
+    }
 
     return (
         <div>
@@ -187,15 +241,15 @@ const OTP = () => {
                     (
                         // <h2>Login success</h2>
                         <form id="register" action="" className={styles["input-group"]}>
-                            <input type="text" className={styles["input-field"]} placeholder="Tên đăng nhập" id="txtID" onBlur={checkUsername} />
+                            <input type="text" className={styles["input-field"]} placeholder="Tên đăng nhập" id="txtName" onBlur={checkUsername} />
                             <input type="password" className={styles["input-field"]} placeholder="Mật khẩu" id="txtPW" required onBlur={checkPassword} />
-                            <input type="password" className={styles["input-field"]} placeholder="Xác nhận mật khẩu" id="txtRPW" required onBlur={rePassword} />
+                            <input type="password" className={styles["input-field"]} placeholder="Xác nhận mật khẩu" id="txtRPW" required onBlur={checkPassword} />
                             <input type="date" className={styles["input-field"]} id="txtBD" required onBlur={checkBirthday} />
-                            <input type="text" className={styles["input-field"]} placeholder="Số điện thoại" required id="txtUN" value={phone} />
-                            <input type="text" className={styles["input-field"]} placeholder="Email" id="txtPhone" />
+                            <input type="text" className={styles["input-field"]} placeholder="Số điện thoại" required id="txtP" value={phone} />
+                            <input type="text" className={styles["input-field"]} placeholder="Email" id="txtE" onBlur={checkEmail} />
                             {/* <input type="checkbox" className={styles["check-box"]} />
                         <span>I agree to the term & condition</span> */}
-                            <button onClick={checkRegister} className={styles["submit-btn"]} style={{ color: 'whitesmoke', fontWeight: 500, fontSize: '20px' }} id="regis">Register</button>
+                            <button onClick={(event) => CheckRegister(event)} className={styles["submit-btn"]} style={{ color: 'whitesmoke', fontWeight: 500, fontSize: '20px' }} id="regis">Register</button>
                         </form>
                     ) :
                     (

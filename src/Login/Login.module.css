@@ -12,7 +12,8 @@ html, body {
   height: 100%;
   width: 100%;
   /* background-color: #d9dde2; */
-  background-image: url(https://images3.alphacoders.com/273/thumb-1920-273289.jpg);
+  /* background-image: url(https://images3.alphacoders.com/273/thumb-1920-273289.jpg); */
+  background-image: url(./asset/img/b.jpg);
   background-position: center;
   background-size: cover;
   position: absolute;
@@ -28,7 +29,8 @@ html, body {
   border-radius: 30px;
   margin-right: 30px;
   box-shadow: 20px -10px 50px white;
-  background-image: linear-gradient(to right top, #d16ba5, #ef7386, #f68866, #e9a64f, #cac451, #9bd06d, #65d896, #00dbc2, #00ccec, #00b6ff, #0095ff, #9c5ffb);
+  background-color: #3b2e90;
+  /* background-image: linear-gradient(to right top, #d16ba5, #ef7386, #f68866, #e9a64f, #cac451, #9bd06d, #65d896, #00dbc2, #00ccec, #00b6ff, #0095ff, #9c5ffb); */
 }
 .button-box {
   width: 230px;
@@ -57,10 +59,11 @@ html, body {
   position: absolute;
   width: 110px;
   height: 100%;
-  background-image: linear-gradient(to right top, #fff00f, #d6f10d, #aaf023, #76ee3c, #12eb54);
-  background-image: -webkit-linear-gradient(40deg, red, blue);
+  /* background-image: linear-gradient(to right top, #fff00f, #d6f10d, #aaf023, #76ee3c, #12eb54);
+  background-image: -webkit-linear-gradient(40deg, red, blue); */
   border-radius: 30px;
   transition: .5s;
+  background-color: #7360f2;
 }
 
 .hero .social-icon{
@@ -86,8 +89,11 @@ html, body {
     outline: none;
     background: transparent;
     padding-left: 10px;
-    color: whitesmoke;
+    /* color: whitesmoke; */
     margin-bottom: 20px;
+  }
+  .input-field:hover{
+    background-color: transparent;
   }
 .submit-btn{
   width: 85%;
@@ -97,8 +103,9 @@ html, body {
   margin: auto;
   border: none;
   /* background-image: linear-gradient(to right top, #fff00f, #d6f10d, #aaf023, #76ee3c, #12eb54); */
-  background-image: -webkit-linear-gradient(40deg, red, blue);;
+  /* background-image: -webkit-linear-gradient(40deg, red, blue);; */
   /* background: linear-gradient(to right, #ff105f, #ffad06); */
+  background-color: #7360f2;
   border-radius: 20px;
   outline: none;
 }

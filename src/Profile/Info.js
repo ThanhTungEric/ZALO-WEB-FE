@@ -3,7 +3,12 @@ import styles from "./Info.module.css";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css'; // Include the CSS file for styling
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+// Redux
+import { useSelector, useDispatch } from "react-redux";
+import { fetchUserByNumberPhone } from "../ReduxToolkit/ActionAndRedux";
+import bcrypt from 'bcryptjs';
 
 const data = [
     {
@@ -17,6 +22,25 @@ const data = [
 
 const Info = () => {
     const [showFormUpdate, setShowFormUpdate] = useState(true);
+
+    // const queryString = window.location.search;
+    // const urlParams = new URLSearchParams(queryString);
+    // const phoneNumber = urlParams.get('phoneNumber');
+    // const password = urlParams.get('password');
+
+    // console.log('Phone number:', phoneNumber);
+    // console.log('Password:', password);
+
+    // const dispatch = useDispatch();
+    // useEffect(() => {
+    //     dispatch(fetchUserByNumberPhone({ phoneNumber, password }));
+    // }
+    //     , [dispatch]);
+
+    const d = useSelector((state) => state.users.users);
+    console.log(d);
+
+
 
     const handleShowFormUpdate = () => {
         setShowFormUpdate(!showFormUpdate);
@@ -37,7 +61,6 @@ const Info = () => {
                 <div className={styles["form-update-box"]}>
                     <div className={styles["form-update-title"]}>
                         <span className={styles["form-update-title-span"]}>Cập nhật thông tin</span>
-
                     </div>
                     <div className={styles["form-update-content"]}>
                         {/* gender */}
@@ -114,42 +137,39 @@ const Info = () => {
                         <div className={styles.line}></div>
 
                         {/* component info and update info */}
-                        {showFormUpdate ? (
+                        {d && (
                             <div className={styles.cover}>
                                 <div className={styles.title}>
-                                    <span>Giới tính</span>
+                                    <span>Email</span>
                                     <span>Ngày sinh</span>
                                     <span>Điện thoại</span>
                                 </div>
-                                {data.map((item, index) => (
-                                    <div className={styles.info} key={index}>
-                                        <span>{item.gender}</span>
-                                        <span>{item.dob}</span>
-                                        <span>{item.phone}</span>
-                                    </div>
-                                ))}
+                                <div className={styles.info}>
+                                    <span>{d.email}</span>
+                                    <span>{d.birthDate}</span>
+                                    <span>{d.phoneNumber}</span>
+                                </div>
                             </div>
-                        ) : (
-                            <FormUpdate data={data} />
                         )}
-
                         <div className={styles.line}></div>
-
                         <button className={styles.button} onClick={handleShowFormUpdate}>
                             <span className={styles.span}> Cập nhật </span>
                         </button>
                     </div>
 
                     {/* avt and name */}
-                    <div className={styles["date-box"]}>
-                        {data.map((item, index) => (
-                            <div className={styles.img} key={index}>
-                                <img src={item.img} alt={"abc"} className={styles.avt} />
-                                <span className={styles.month}>{item.name}</span>
-                                <span className={styles.date}>29</span>
+                    {
+                        d && (
+                            <div className={styles["date-box"]}>
+                                <div className={styles.img}>
+                                    <img src={d.img} alt={"Thanh muốn có bồ huhu :(("} className={styles.avt} />
+                                    <span className={styles.month}>{d.fullName}</span>
+                                    <span className={styles.date}>a</span>
+                                </div>
                             </div>
-                        ))}
-                    </div>
+                        )
+                    }
+
                 </div>
             </div>
         </div>
