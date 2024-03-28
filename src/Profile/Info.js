@@ -8,7 +8,8 @@ import { useState, useEffect } from "react";
 // Redux
 import { useSelector, useDispatch } from "react-redux";
 import { fetchUserByNumberPhone } from "../ReduxToolkit/ActionAndRedux";
-import bcrypt from 'bcryptjs';
+
+import { selectLoggedInUser } from '../ReduxToolkit/ActionAndRedux';
 
 const data = [
     {
@@ -23,29 +24,17 @@ const data = [
 const Info = () => {
     const [showFormUpdate, setShowFormUpdate] = useState(true);
 
-    // const queryString = window.location.search;
-    // const urlParams = new URLSearchParams(queryString);
-    // const phoneNumber = urlParams.get('phoneNumber');
-    // const password = urlParams.get('password');
-
-    // console.log('Phone number:', phoneNumber);
-    // console.log('Password:', password);
-
-    // const dispatch = useDispatch();
-    // useEffect(() => {
-    //     dispatch(fetchUserByNumberPhone({ phoneNumber, password }));
-    // }
-    //     , [dispatch]);
-
-    const d = useSelector((state) => state.users.users);
-    console.log(d);
 
 
 
+    const loggedInUser = useSelector(selectLoggedInUser);
+
+    const userData = localStorage.getItem("user");
+    const user = JSON.parse(userData);
+    console.log(user);
     const handleShowFormUpdate = () => {
         setShowFormUpdate(!showFormUpdate);
     };
-
     // component update info
     const FormUpdate = ({ data }) => {
 
@@ -101,6 +90,7 @@ const Info = () => {
                                     {/* Use the DatePicker component */}
                                     <DatePicker
                                         selected={new Date(data[0].dob)} // Provide the initial date
+                                        onChange={(date) => handleDateChange(date)} // Define a function to handle date changes
                                         dateFormat="dd/MM/yyyy" // Set the desired date format
                                         className={styles["form-update-content-box-input-input"]} // Apply your styling here
                                     />
@@ -125,8 +115,6 @@ const Info = () => {
             </div>
         );
     };
-
-
     return (
         <div className={styles.container}>
             <div className={styles.parent}>
@@ -136,7 +124,7 @@ const Info = () => {
                         <div className={styles.line}></div>
 
                         {/* component info and update info */}
-                        {d && (
+                        {user && (
                             <div className={styles.cover}>
                                 <div className={styles.title}>
                                     <span>Email</span>
@@ -144,9 +132,9 @@ const Info = () => {
                                     <span>Điện thoại</span>
                                 </div>
                                 <div className={styles.info}>
-                                    <span>{d.email}</span>
-                                    <span>{d.birthDate}</span>
-                                    <span>{d.phoneNumber}</span>
+                                    <span>{user.email}</span>
+                                    <span>{user.birthDate}</span>
+                                    <span>{user.phoneNumber}</span>
                                 </div>
                             </div>
                         )}
@@ -155,14 +143,13 @@ const Info = () => {
                             <span className={styles.span}> Cập nhật </span>
                         </button>
                     </div>
-
                     {/* avt and name */}
                     {
-                        d && (
+                        user && (
                             <div className={styles["date-box"]}>
                                 <div className={styles.img}>
-                                    <img src={d.img} alt={"Thanh muốn có bồ huhu :(("} className={styles.avt} />
-                                    <span className={styles.month}>{d.fullName}</span>
+                                    <img /*src={user.img}*/ src="https://i.pinimg.com/736x/5d/6d/23/5d6d23fd7adb44baba20a60c252da339.jpg" alt={"Thanh muốn có bồ huhu :(("} className={styles.avt} />
+                                    <span className={styles.month}>{user.fullName}</span>
                                     <span className={styles.date}>a</span>
                                 </div>
                             </div>

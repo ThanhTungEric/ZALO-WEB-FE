@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import '../../styles/chatcomponent/Message.css'
+import Picker from '@emoji-mart/react';
+import data from '@emoji-mart/data'
 
 const messageList = [
     {
@@ -66,6 +68,23 @@ const messageList = [
 ]
 
 function Message({ selectedChat }) {
+
+    const [isPickerVisible, setIsPickerVisible] = useState(false);
+    const [currentEmoji, setCurrentEmoji] = useState(null);
+
+    // Hàm để chèn emoji được chọn vào ô input
+    const insertEmoji = (emoji) => {
+        setCurrentEmoji(emoji); // Lưu emoji vào state
+        const input = document.querySelector('.input-message'); // Lấy thẻ input
+        const startPos = input.selectionStart; // Lấy vị trí con trỏ hiện tại
+        const endPos = input.selectionEnd;
+        const text = input.value;
+        const newText = text.substring(0, startPos) + emoji + text.substring(endPos);
+        input.value = newText; // Thêm emoji vào vị trí con trỏ
+        input.focus(); // Focus vào input sau khi thêm emoji
+        input.setSelectionRange(startPos + emoji.length, startPos + emoji.length); // Di chuyển con trỏ tới cuối emoji vừa thêm
+    };
+
     return (
         <div className="message-container">
             <div>
@@ -138,11 +157,25 @@ function Message({ selectedChat }) {
                 </div>
                 <div className='d-flex mt-1'>
                     <div className='message-input'>
-                        <input type="text" className='input-message' placeholder='Nhập tin nhắn' />
+                        <input
+                            type="text"
+                            className='input-message'
+                            placeholder='Nhập tin nhắn và emoji'
+                        />
+                        {/* Trình chọn emoji */}
+
                     </div>
                     <div className='message-send d-flex'>
-                        <div className='create-group-chat'></div>
-                        <div className='create-group-chat'></div>
+                        {/* Hiển thị trình chọn emoji nếu isPickerVisible là true */}
+                        <img
+                            src="https://www.motionpicturemagazine.com/wp-content/uploads/2023/12/Best-blue-emojis.png.webp"
+                            alt="emoji"
+                            className="button-image"
+                            onClick={() => setIsPickerVisible(!isPickerVisible)}
+                        />
+                        <div className={isPickerVisible ? 'd-block' : 'd-none'}>
+                            <Picker data={data} previewPosition="none" onEmojiSelect={(e) => { insertEmoji(e.native); setIsPickerVisible(false) }} />
+                        </div>
                         <div className='create-group-chat'></div>
                         <div className='create-group-chat'></div>
                     </div>

@@ -19,9 +19,11 @@ import OTP from '../OTP/OTP';
 // redux
 import Info from '../Profile/Info';
 import { useSelector, useDispatch } from "react-redux";
-import { fetchUserByNumberPhone } from "../ReduxToolkit/ActionAndRedux";
+import { loginUser } from "../ReduxToolkit/ActionAndRedux";
 import { Link } from 'react-router-dom';
 const bcrypt = require('bcryptjs');
+import { selectLoggedInUser } from '../ReduxToolkit/ActionAndRedux';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const [phoneNumber, setPhoneNumber] = useState('');
@@ -30,43 +32,47 @@ const Login = () => {
     const [error, setError] = useState(null);
     const [newArr, setNewArr] = useState([]);
 
+    const navigate = useNavigate();
+
     const dispatch = useDispatch();
+    const loggedInUser = useSelector(selectLoggedInUser);
 
 
-    const url = `http://localhost:8080/user/login`;
 
     const login = async (e) => {
         e.preventDefault();
+
+        const data = {
+            phoneNumber: phoneNumber,
+            password: password
+        };
+
         try {
-            const hashedPassword = await bcrypt.hash(password, 10);
-            // Gửi yêu cầu đăng nhập
-            const response = await fetch(url, {
+            const response = await fetch('http://localhost:8080/user/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    phoneNumber,
-                    password
-                })
+                body: JSON.stringify(data)
             });
 
-            // Kiểm tra phản hồi từ máy chủ
-            if (!response.ok) {
-                const data = await response.json();
-                throw new Error(data.message || 'Đăng nhập thất bại');
+            if (response.ok) {
+                const userData = await response.json();
+                dispatch(loginUser(userData));
+                // Xử lý dữ liệu trả về sau khi đăng nhập thành công (nếu cần)
+                console.log(userData);
+
+                const userDatad = localStorage.setItem('user', JSON.stringify(userData));
+                console.log(userDatad);
+
+                navigate('/info');
+            } else {
+                // Xử lý lỗi khi không đăng nhập thành công
+                // console.error('Login failed');
             }
-
-            // Lấy thông tin người dùng từ Redux store
-            dispatch(fetchUserByNumberPhone({ phoneNumber, password }));
-
-            // Chuyển hướng người dùng đến trang Info với thông tin đăng nhập
-            const queryString = `?phoneNumber=${phoneNumber}&password=${hashedPassword}`;
-            const infoUrl = '/info' + queryString;
-            window.location.href = infoUrl;
         } catch (error) {
-            console.error('Đăng nhập thất bại:', error.message);
-            alert('Đăng nhập thất bại');
+            // Xử lý lỗi nếu có lỗi trong quá trình gửi yêu cầu
+            console.error('Error:', error);
         }
     };
 

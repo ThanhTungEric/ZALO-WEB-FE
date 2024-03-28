@@ -19,6 +19,10 @@ function App() {
       </Provider>
 
     </div>
+
+    // <div className="App">
+    //   <MainMenu />
+    // </div>
     // <div className="App">
     //   {/* <PhoneBookMenu /> */}
     //   {/* <Chat /> */}

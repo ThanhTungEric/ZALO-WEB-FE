@@ -78,3 +78,12 @@
 .message-time{
   font-size: 11px;
 }
+
+.button-image {
+  width: 30px; 
+  height: 30px;
+  vertical-align: middle; 
+  margin-right: 5px; 
+  border-radius: 5px;
+}
+
