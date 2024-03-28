@@ -1,4 +1,7 @@
-import React from 'react'
+import React, { useState, useEffect, useRef } from "react";
+import { v4 as uuidv4 } from "uuid";
+import axios from "axios";
+import { sendMessageRoute, recieveMessageRoute } from "../../router/APIRouters";
 import '../../styles/chatcomponent/Message.css'
 
 const messageList = [
@@ -66,6 +69,7 @@ const messageList = [
 ]
 
 function Message({ selectedChat }) {
+    console.log(selectedChat)
     return (
         <div className="message-container">
             <div>
@@ -76,7 +80,7 @@ function Message({ selectedChat }) {
                                 <img src={selectedChat.avatar} alt="avatar" className='avatar-custom' />
                             </div>
                             <div className='ml-2'>
-                                <div className='name'>{selectedChat.name}</div>
+                                <div className='name'>{selectedChat.fullName}</div>
                             </div>
                         </div>
                         <div className='d-flex'>

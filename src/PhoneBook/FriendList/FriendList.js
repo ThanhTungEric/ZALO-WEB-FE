@@ -173,7 +173,7 @@ const FriendList = () => {
   const renderItemsByType = () => {
     return Object.keys(itemsByType).map((type) => (
       <div key={type}>
-        <h2>{type}</h2>
+        <h4>{type}</h4>
         {itemsByType[type].map((item, index) => (
           <div key={index} className={styles.abc}>
             <div className={styles.info}>
@@ -182,7 +182,7 @@ const FriendList = () => {
                 alt={item.info.name}
                 className={styles.avt}
               />
-              <h3>{item.info.name}</h3>
+              <p className={["text"]}>{item.info.name}</p>
             </div>
             <hr style={{ width: "100%" }}></hr>
           </div>

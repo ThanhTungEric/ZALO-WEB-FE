@@ -137,13 +137,23 @@
     width: 100%;
     padding: 10px;
   }
+  .abc{
+    height: 90px;
+  }
   .info{
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: start;
     width: 100%;
-    padding: 10px;
+    padding: 5px;
+  }
+  .text {
+    margin-bottom: 0; /* Loại bỏ margin dưới nếu có */
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 18px;
+    font-weight: 500;
   }
   .abc:hover{
     background-color: #70d8ff;
@@ -151,8 +161,8 @@
     cursor: pointer;
   }
   .avt{
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background-color: #e0e0e0;
     margin-right: 10px;

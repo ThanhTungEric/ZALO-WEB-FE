@@ -7,44 +7,16 @@ import { useState, useEffect } from "react";
 
 // Redux
 import { useSelector, useDispatch } from "react-redux";
-import { fetchUserByNumberPhone } from "../ReduxToolkit/ActionAndRedux";
-import bcrypt from 'bcryptjs';
-
-const data = [
-    {
-        name: "Huynh Chi Thanh",
-        img: "https://wallpapers.com/images/featured/pikachu-4k-uzcr6pdp4a36rrd4.jpg",
-        dob: "12/02/2002",
-        gender: "Nam",
-        phone: "0787958654",
-    },
-];
+import { selectUser } from "../redux-toolkit/userSlice";
 
 const Info = () => {
     const [showFormUpdate, setShowFormUpdate] = useState(true);
 
-    // const queryString = window.location.search;
-    // const urlParams = new URLSearchParams(queryString);
-    // const phoneNumber = urlParams.get('phoneNumber');
-    // const password = urlParams.get('password');
-
-    // console.log('Phone number:', phoneNumber);
-    // console.log('Password:', password);
-
-    // const dispatch = useDispatch();
-    // useEffect(() => {
-    //     dispatch(fetchUserByNumberPhone({ phoneNumber, password }));
-    // }
-    //     , [dispatch]);
-
-    const d = useSelector((state) => state.users.users);
-    console.log(d);
-
-
-
     const handleShowFormUpdate = () => {
         setShowFormUpdate(!showFormUpdate);
     };
+    const d = useSelector(selectUser);
+    console.log(d);
 
     // component update info
     const FormUpdate = ({ data }) => {
@@ -136,7 +108,7 @@ const Info = () => {
                         <div className={styles.line}></div>
 
                         {/* component info and update info */}
-                        {d && (
+                        {/* {d && (
                             <div className={styles.cover}>
                                 <div className={styles.title}>
                                     <span>Email</span>
@@ -149,7 +121,7 @@ const Info = () => {
                                     <span>{d.phoneNumber}</span>
                                 </div>
                             </div>
-                        )}
+                        )} */}
                         <div className={styles.line}></div>
                         <button className={styles.button} onClick={handleShowFormUpdate}>
                             <span className={styles.span}> Cập nhật </span>
@@ -157,7 +129,7 @@ const Info = () => {
                     </div>
 
                     {/* avt and name */}
-                    {
+                    {/* {
                         d && (
                             <div className={styles["date-box"]}>
                                 <div className={styles.img}>
@@ -167,7 +139,7 @@ const Info = () => {
                                 </div>
                             </div>
                         )
-                    }
+                    } */}
 
                 </div>
             </div>

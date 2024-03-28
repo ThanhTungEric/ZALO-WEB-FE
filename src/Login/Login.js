@@ -1,78 +1,52 @@
 import 'firebase/auth';
-import {
-    onAuthStateChanged
-} from 'firebase/auth';
 import 'firebase/compat/auth';
 import React, { useEffect, useState, useRef } from 'react';
 import styles from './Login.module.css';
 
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
-import OtpInput from 'otp-input-react';
-import { BsTelephone } from 'react-icons/bs';
-import { CgSpinner } from 'react-icons/cg';
-import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import { auth } from '../firebase.config';
 import { toast, Toaster } from 'react-hot-toast';
 import OTP from '../OTP/OTP';
 
 // redux
-import Info from '../Profile/Info';
-import { useSelector, useDispatch } from "react-redux";
-import { fetchUserByNumberPhone } from "../ReduxToolkit/ActionAndRedux";
-import { Link } from 'react-router-dom';
-const bcrypt = require('bcryptjs');
 
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../redux-toolkit/userSlice';
 const Login = () => {
+    const dispatch = useDispatch();
     const [phoneNumber, setPhoneNumber] = useState('');
     const [password, setPassword] = useState('');
-    const [userData, setUserData] = useState([]); // State to store user data
-    const [error, setError] = useState(null);
-    const [newArr, setNewArr] = useState([]);
-
-    const dispatch = useDispatch();
-
 
     const url = `http://localhost:8080/user/login`;
 
-    const login = async (e) => {
+    const loginbutton = async (e) => {
         e.preventDefault();
+        const data = {
+            phoneNumber: phoneNumber,
+            password: password
+        };
         try {
-            const hashedPassword = await bcrypt.hash(password, 10);
-            // Gửi yêu cầu đăng nhập
-            const response = await fetch(url, {
+            const response = await fetch('http://localhost:8080/user/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    phoneNumber,
-                    password
-                })
+                body: JSON.stringify(data)
             });
-
-            // Kiểm tra phản hồi từ máy chủ
-            if (!response.ok) {
-                const data = await response.json();
-                throw new Error(data.message || 'Đăng nhập thất bại');
+            if (response.ok) {
+                const userData = await response.json();
+                console.log(userData);
+                dispatch(login({userInfo: userData}));
+                window.location.href = '/info';
+            } else {
+                console.error('Login failed');
             }
-
-            // Lấy thông tin người dùng từ Redux store
-            dispatch(fetchUserByNumberPhone({ phoneNumber, password }));
-
-            // Chuyển hướng người dùng đến trang Info với thông tin đăng nhập
-            const queryString = `?phoneNumber=${phoneNumber}&password=${hashedPassword}`;
-            const infoUrl = '/info' + queryString;
-            window.location.href = infoUrl;
         } catch (error) {
-            console.error('Đăng nhập thất bại:', error.message);
-            alert('Đăng nhập thất bại');
+            console.error('Error:', error);
         }
     };
 
-
-
-    // đồng hồ analog
     const [rotationDegrees, setRotationDegrees] = useState({
         seconds: 0,
         minutes: 0,
@@ -277,7 +251,7 @@ const Login = () => {
                     </div>
 
                     {isLoginFormVisible ? (
-                        <form id="login" action="" className={styles["input-group"]} onSubmit={login}>
+                        <form id="login" action="" className={styles["input-group"]} onSubmit={loginbutton}>
                             <input id="txtPhone" type="text" className={styles["input-field"]} placeholder="Số điện thoại" required onChange={(e) => setPhoneNumber(e.target.value)} value={phoneNumber} />
                             <input id="txtPass" type="password" className={styles["input-field"]} placeholder="User password" required onChange={(e) => setPassword(e.target.value)} value={password} />
                             <input type="checkbox" className={styles["check-box"]} /><span>Remember Password</span>

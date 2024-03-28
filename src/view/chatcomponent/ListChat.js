@@ -2,43 +2,25 @@ import React, { useEffect, useState } from 'react'
 import '../../styles/chatcomponent/ListChat.css'
 import Message from './Message'
 
-const listChat = [
-    {
-        id: 1,
-        name: 'Nguyễn Văn A',
-        avatar: 'https://res.cloudinary.com/dtpmltwhp/image/upload/v1704788280/chat-app-image/avatar/d5dfhestighncbdqqq6o.jpg',
-        message: 'Hello',
-        time: '12:00',
-        isRead: false
-    },
-    {
-        id: 2,
-        name: 'Nguyễn Văn B',
-        avatar: 'https://res.cloudinary.com/dtpmltwhp/image/upload/v1704788280/chat-app-image/avatar/d5dfhestighncbdqqq6o.jpg',
-        message: 'Hello',
-        time: '12:00',
-        isRead: false
-    },
-    {
-        id: 3,
-        name: 'Nguyễn Văn C',
-        avatar: 'https://res.cloudinary.com/dtpmltwhp/image/upload/v1704788280/chat-app-image/avatar/d5dfhestighncbdqqq6o.jpg',
-        message: 'Hello',
-        time: '12:00',
-        isRead: false
-    },
-    {
-        id: 4,
-        name: 'Nguyễn Văn D',
-        avatar: 'https://res.cloudinary.com/dtpmltwhp/image/upload/v1704788280/chat-app-image/avatar/d5dfhestighncbdqqq6o.jpg',
-        message: 'Hello',
-        time: '12:00',
-        isRead: false
-    }
-]
-
 const ListChat = ({ onItemClick }) => {
     const [isFocus, setIsFocus] = React.useState(false)
+    const [data, setData] = useState([]);
+    //http://localhost:8080/friend/get-friend/6602dc87fb5cb27863e9519c
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch('http://localhost:8080/friend/get-friend/6602dc87fb5cb27863e9519c')
+                const data = await response.json()
+                const friendInfos = data.map(item => item.friendInfo);
+                console.log(data)
+                setData(friendInfos);
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        fetchData()
+    }, [])
+
 
     return (
         <div className="list-chat-container">
@@ -64,7 +46,7 @@ const ListChat = ({ onItemClick }) => {
             </div>
             <div className='mt-1'>
                 {
-                    listChat.map((item, index) => {
+                    data.map((item, index) => {
                         return (
                             <div className={`list-chat-item ${isFocus ? 'focused' : ''}`} key={index} onClick={() => onItemClick(item)}>
                                 <div className='avatar-container'>
@@ -72,10 +54,10 @@ const ListChat = ({ onItemClick }) => {
                                 </div>
                                 <div className='info-container'>
                                     <div className='info-name'>
-                                        {item.name}
+                                        {item.fullName}
                                     </div>
                                     <div className='info-message'>
-                                        Bạn: {item.message}
+                                        Bạn: nônnoo
                                     </div>
                                 </div>
                                 <div className='time-container'>
