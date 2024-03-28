@@ -89,6 +89,7 @@
 
 .chat-messages {
   padding: 1rem 2rem;
+  height: 90vh;
   display: flex;
   flex-direction: column;
   gap: 1rem;

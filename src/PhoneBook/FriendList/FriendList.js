@@ -183,27 +183,6 @@ const FriendList = () => {
     setSortOrder(order);
   };
 
-  // Component friend
-  const renderItemsByType = () => {
-    return Object.keys(itemsByType).map((type) => (
-      <div key={type}>
-        <h4>{type}</h4>
-        {itemsByType[type].map((item, index) => (
-          <div key={index} className={styles.abc}>
-            <div className={styles.info}>
-              <img
-                src={item.info.img}
-                alt={item.info.name}
-                className={styles.avt}
-              />
-              <p className={["text"]}>{item.info.name}</p>
-            </div>
-            <hr style={{ width: "100%" }}></hr>
-          </div>
-        ))}
-      </div>
-    ));
-  };
 
   return (
     <div className={styles.container}>
