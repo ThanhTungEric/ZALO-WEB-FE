@@ -122,24 +122,46 @@ const data = [
 
 const FriendList = () => {
 
-  // const [data, setData] = useState([]);
-  // // lấy userId gắn vào link để lấy dữ liệu từ server - nhớ sửa lại
-  // useEffect(() => {
-  //   fetch("http://localhost:8080/friend/get-friend/65f076ac5c69ae13bb82b877", {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       console.log(data);
-  //       setData(data);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error:", error);
-  //     });
-  // }, []);
+  const user = localStorage.getItem("user");
+  const userId = JSON.parse(user)._id;
+  console.log(userId);
+
+  const [data, setData] = useState([]);
+  // lấy userId gắn vào link để lấy dữ liệu từ server - nhớ sửa lại
+  useEffect(() => {
+    fetch(`http://localhost:8080/friend/get-friend/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setData(data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }, []);
+  // Hàm chuyển đổi dữ liệu thành dữ liệu mới
+  const transformData = data.map((item) => {
+    return {
+      _id: item.friend._id,
+      fullName: item.friendInfo.fullName,
+      birthDate: item.friendInfo.birthDate,
+      email: item.friendInfo.email,
+      phoneNumber: item.friendInfo.phoneNumber,
+      status: item.friendInfo.status,
+    }
+  })
+  const friendListArray = [];
+  transformData.forEach((item) => {
+    let newItem = { ...item };
+    friendListArray.push(newItem);
+  })
+  console.log(friendListArray);
+
 
 
   const [sortedData, setSortedData] = useState(data);
@@ -160,14 +182,6 @@ const FriendList = () => {
     setSortedData(sorted);
     setSortOrder(order);
   };
-  //Duyệt phần tử theo loại với mảng đã sắp xếp theo type
-  const itemsByType = {};
-  sortedData.forEach((item) => {
-    if (!itemsByType[item.type]) {
-      itemsByType[item.type] = [];
-    }
-    itemsByType[item.type].push(item);
-  });
 
   // Component friend
   const renderItemsByType = () => {
@@ -222,7 +236,22 @@ const FriendList = () => {
       </div>
       {/* list friend */}
       <div className={styles["list-friend"]}>
-        <div className={styles.friend}>{renderItemsByType()}</div>
+        <div className={styles.friend}>
+          {friendListArray.map((friend, index) => (
+            <div key={index} className={styles.abc}>
+              <div className={styles.info}>
+                <img
+                  src=""
+                  alt={friend.fullName}
+                  className={styles.avt}
+                />
+                <h3>{friend.fullName}</h3>
+              </div>
+              <hr style={{ width: "100%" }}></hr>
+            </div>
+          ))}
+
+        </div>
       </div>
     </div>
   );

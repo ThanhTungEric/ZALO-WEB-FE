@@ -1,15 +1,34 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import '../../styles/chatcomponent/ListChat.css'
 import Message from './Message'
+import { getFriendRoute } from '../../router/APIRouters'
+
 
 const ListChat = ({ onItemClick }) => {
-    const [isFocus, setIsFocus] = React.useState(false)
+    const [isFocus, setIsFocus] = React.useState(false);
+
     const [data, setData] = useState([]);
+    const [user, setUser] = useState(null);
+
+    const getUser = async () => {
+        if (!localStorage.getItem('user')) {
+            console.log('User not found');
+        } else {
+            setUser(
+                await JSON.parse(localStorage.getItem('user'))
+            );
+        }
+    };
+    useEffect(() => {
+        getUser();
+        console.log('data tu user', user)
+    }, [])
+    
     //http://localhost:8080/friend/get-friend/6602dc87fb5cb27863e9519c
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('http://localhost:8080/friend/get-friend/6602dc87fb5cb27863e9519c')
+                const response = await fetch(`${getFriendRoute}/${user._id}`)
                 const data = await response.json()
                 const friendInfos = data.map(item => item.friendInfo);
                 console.log(data)
@@ -19,8 +38,7 @@ const ListChat = ({ onItemClick }) => {
             }
         }
         fetchData()
-    }, [])
-
+    }, [user])
 
     return (
         <div className="list-chat-container">

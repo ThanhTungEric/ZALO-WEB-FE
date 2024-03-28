@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment } from "@fortawesome/free-solid-svg-icons";
@@ -11,52 +11,85 @@ import {
   useNavigate,
 } from "react-router-dom";
 
-// img
-import avt1 from "../img/father.png";
-import avt2 from "../img/mother.png";
-import avt3 from "../img/son.png";
-const data = [
-  {
-    name: "Huynh Chi Thanh",
-    img: avt1,
-    date: "01/01/2024",
-  },
-  {
-    name: "F",
-    img: avt3,
-    date: "01/01/2024",
-  },
-  {
-    type: "Bạn bè",
-    date: "01/01/2024",
-
-    name: "C",
-    img: avt2,
-    date: "01/01/2024",
-  },
-  {
-    name: "D",
-    img: avt1,
-    date: "01/01/2024",
-  },
-  {
-    name: "B",
-    img: avt3,
-    date: "01/01/2024",
-  },
-  {
-    name: "H",
-    img: avt2,
-    date: "01/01/2024",
-  },
-  {
-    name: "H",
-    img: avt2,
-    date: "01/01/2024",
-  },
-];
-
 const AddFriend = () => {
+
+  // lay du lieu tu localStorage
+  const user = localStorage.getItem("user");
+  const userId = JSON.parse(user)._id;
+  const [data, setData] = useState([]);
+
+
+  /////////////////////////////////////////////////////API get add friend
+  useEffect(() => {
+    fetch(`http://localhost:8080/friend/get-add-friend/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setData(data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }, []);
+  const transformData = data.map((item) => {
+    return {
+      _id: item.friend._id,
+      fullName: item.friendInfo.fullName,
+      birthDate: item.friendInfo.birthDate,
+      email: item.friendInfo.email,
+      phoneNumber: item.friendInfo.phoneNumber,
+      status: item.friendInfo.status,
+      idUser1: item.friend.idUser1,
+      idUser2: item.friend.idUser2,
+      avatar: item.friendInfo.avatar,
+    }
+  })
+  const friendListArray = [];
+  transformData.forEach((item) => {
+    let newItem = { ...item };
+    friendListArray.push(newItem);
+  })
+  /////////////////////////////////////////////////API get add friend
+  // API accept friend
+  const getFriendId = transformData.map((item) => {
+    return {
+      idUser1: item.idUser1,
+      idUser2: item.idUser2,
+    }
+  })
+  const userCuatuine = localStorage.getItem("user");
+  const userIdCuatuine = JSON.parse(userCuatuine)._id;
+
+
+  const handleAcceptFriend = async ({ userId1, userId2 }) => {
+    try {
+      const response = await fetch(`http://localhost:8080/friend/accept-friend`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          idUser1: userId1,
+          idUser2: userId2,
+        }),
+
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to accept friend.');
+      }
+
+      const data = await response.json();
+    } catch (error) {
+      console.error('Error accepting friend:', error);
+    }
+  };
+
+  /////////////////////////////////////////////////API accept friend
   // pôpup confirm
   const [isRefuseModalOpen, setIsRefuseModalOpen] = useState(false);
   const openRefuseModal = () => {
@@ -112,9 +145,9 @@ const AddFriend = () => {
             <div className={styles["card-border-top"]}></div>
 
             <div className={styles.img}>
-              <img src={item.img} alt={item.name} className={styles.avt} />
+              <img src={item.avatar} alt={item.fullName} className={styles.avt} />
             </div>
-            <span> {item.name}</span>
+            <span> {item.fullName}</span>
             <p className="date text-center"> {item.date}</p>
             <div className="text-center">
               <button
@@ -130,7 +163,8 @@ const AddFriend = () => {
                 >
                   Từ chối
                 </button>
-                <button className={styles["accept-button"]}> Đồng ý</button>
+                <button className={styles["accept-button"]} onClick={() => handleAcceptFriend({ userId1: item.idUser1, userId2: item.idUser2 })}
+                > Đồng ý</button>
               </div>
             </div>
           </div>
@@ -142,7 +176,7 @@ const AddFriend = () => {
   return (
     <div className={styles.container}>
       <div className={styles.cover}>
-        {data.map((item, index) => (
+        {friendListArray.map((item, index) => (
           <Friend key={index} item={item} index={index} />
         ))}
         <ConfirmRefuse />

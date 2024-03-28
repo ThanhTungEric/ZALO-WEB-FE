@@ -2,51 +2,59 @@ import 'firebase/auth';
 import 'firebase/compat/auth';
 import React, { useEffect, useState, useRef } from 'react';
 import styles from './Login.module.css';
-
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 import 'react-phone-input-2/lib/style.css';
 import { auth } from '../firebase.config';
 import { toast, Toaster } from 'react-hot-toast';
 import OTP from '../OTP/OTP';
-
+import {loginRoute} from '../router/APIRouters'
 // redux
+import { Link, useNavigate  } from 'react-router-dom';
 
-import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../redux-toolkit/userSlice';
 const Login = () => {
-    const dispatch = useDispatch();
     const [phoneNumber, setPhoneNumber] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
-    const url = `http://localhost:8080/user/login`;
-
-    const loginbutton = async (e) => {
+    const login = async (e) => {
         e.preventDefault();
+
         const data = {
             phoneNumber: phoneNumber,
             password: password
         };
+
         try {
-            const response = await fetch('http://localhost:8080/user/login', {
+            const response = await fetch(`${loginRoute}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(data)
             });
+
             if (response.ok) {
                 const userData = await response.json();
+                // Xử lý dữ liệu trả về sau khi đăng nhập thành công (nếu cần)
                 console.log(userData);
-                dispatch(login({userInfo: userData}));
-                window.location.href = '/info';
+
+                const userDatad = localStorage.setItem('user', JSON.stringify(userData));
+                console.log(userDatad);
+
+                navigate('/');
             } else {
-                console.error('Login failed');
+                // Xử lý lỗi khi không đăng nhập thành công
+                // console.error('Login failed');
             }
         } catch (error) {
+            // Xử lý lỗi nếu có lỗi trong quá trình gửi yêu cầu
             console.error('Error:', error);
         }
     };
 
+
+
+    // đồng hồ analog
     const [rotationDegrees, setRotationDegrees] = useState({
         seconds: 0,
         minutes: 0,
@@ -251,7 +259,7 @@ const Login = () => {
                     </div>
 
                     {isLoginFormVisible ? (
-                        <form id="login" action="" className={styles["input-group"]} onSubmit={loginbutton}>
+                        <form id="login" action="" className={styles["input-group"]} onSubmit={login}>
                             <input id="txtPhone" type="text" className={styles["input-field"]} placeholder="Số điện thoại" required onChange={(e) => setPhoneNumber(e.target.value)} value={phoneNumber} />
                             <input id="txtPass" type="password" className={styles["input-field"]} placeholder="User password" required onChange={(e) => setPassword(e.target.value)} value={password} />
                             <input type="checkbox" className={styles["check-box"]} /><span>Remember Password</span>
