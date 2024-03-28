@@ -6,70 +6,6 @@ import '../../styles/chatcomponent/Message.css'
 import Picker from '@emoji-mart/react';
 import data from '@emoji-mart/data'
 
-const messageList = [
-    {
-        id: 1,
-        message: 'Hellosaaaaaaaaaaaaa chào bạn chào bạn chào bạn chào bạn chào bạn chào bạn chào bạn chào bạn',
-        time: '12:00',
-        senderId: 2,
-        isRead: false
-    },
-    {
-        id: 2,
-        message: 'Chào bạn chào bạn chào bạn chào bạn chào bạn chào bạn chào bạn chào bạn chào bạn',
-        time: '12:00',
-        senderId: 1,
-        isRead: false
-    },
-    {
-        id: 3,
-        message: 'Bạn ăn cơm chưa',
-        time: '12:00',
-        senderId: 1,
-        isRead: false
-    },
-    {
-        id: 4,
-        message: 'Tôi ăn rồi',
-        time: '12:00',
-        senderId: 2,
-        isRead: false
-    },
-    {
-        id: 5,
-        message: 'Tôi ăn rồi',
-        time: '12:00',
-        senderId: 2,
-        isRead: false
-    }, {
-        id: 6,
-        message: 'Tôi ăn rồi',
-        time: '12:00',
-        senderId: 2,
-        isRead: false
-    }, {
-        id: 7,
-        message: 'Tôi ăn rồi',
-        time: '12:00',
-        senderId: 2,
-        isRead: false
-    }, {
-        id: 8,
-        message: 'Tôi ăn rồi',
-        time: '12:00',
-        senderId: 2,
-        isRead: false
-    }
-    , {
-        id: 9,
-        message: 'Tôi ăn rồi',
-        time: '12:00',
-        senderId: 2,
-        isRead: false
-    }
-
-]
-
 function Message({ selectedChat, socket }) {
     const [isPickerVisible, setIsPickerVisible] = useState(false);
     const [messages, setMessages] = useState([]);
@@ -227,12 +163,15 @@ function Message({ selectedChat, socket }) {
                             className="button-image"
                             onClick={() => setIsPickerVisible(!isPickerVisible)}
                         />
-                        <div className={isPickerVisible ? 'd-block' : 'd-none'}>
-                            <Picker data={data} previewPosition="none" onEmojiSelect={(e) => { insertEmoji(e.native); setIsPickerVisible(false) }} />
+                        <div className="emoji">
+                            <div className={isPickerVisible ? 'd-block' : 'd-none'}>
+                                <Picker data={data} previewPosition="none" onEmojiSelect={(e) => { insertEmoji(e.native); setIsPickerVisible(false) }} />
+                            </div>
                         </div>
                         <div className='create-group-chat'
                             onClick={sendChat}
                         >Gửi</div>
+
                         <div className='create-group-chat'></div>
                     </div>
                 </div>
