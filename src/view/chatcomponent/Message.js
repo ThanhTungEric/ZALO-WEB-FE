@@ -173,9 +173,12 @@ function Message({ selectedChat }) {
                             className="button-image"
                             onClick={() => setIsPickerVisible(!isPickerVisible)}
                         />
-                        <div className={isPickerVisible ? 'd-block' : 'd-none'}>
-                            <Picker data={data} previewPosition="none" onEmojiSelect={(e) => { insertEmoji(e.native); setIsPickerVisible(false) }} />
+                        <div className="emoji">
+                            <div className={isPickerVisible ? 'd-block' : 'd-none'}>
+                                <Picker data={data} previewPosition="none" onEmojiSelect={(e) => { insertEmoji(e.native); setIsPickerVisible(false) }} />
+                            </div>
                         </div>
+
                         <div className='create-group-chat'></div>
                         <div className='create-group-chat'></div>
                     </div>

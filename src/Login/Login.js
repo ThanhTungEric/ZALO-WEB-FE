@@ -65,7 +65,7 @@ const Login = () => {
                 const userDatad = localStorage.setItem('user', JSON.stringify(userData));
                 console.log(userDatad);
 
-                navigate('/info');
+                navigate('/chat');
             } else {
                 // Xử lý lỗi khi không đăng nhập thành công
                 // console.error('Login failed');
